@@ -18,12 +18,12 @@ Alpaydın, Ethem (2018), Yapay Öğrenme, 4. Baskı (Ethem Alpaydın, Introducti
 
 ## Ders Planı 
 
-1. Giriş: [html](Sunumlar/01-Giris.html) | [pdf](Sunumlar/01-Giris.pdf)
+1. Giriş: [html](https://raw.githack.com/htastan/Makine-Ogrenmesi/master/Sunumlar/01-Giris.html) | [pdf](https://raw.githack.com/htastan/Makine-Ogrenmesi/master/Sunumlar/01-Giris.pdf)
 
-2. Temel Kavramlar: [html](Sunumlar/02-Temel-Kavramlar.html) | [pdf](Sunumlar/02-Temel-Kavramlar.pdf) 
+2. Temel Kavramlar: [html](https://raw.githack.com/htastan/Makine-Ogrenmesi/master/Sunumlar/02-Temel-Kavramlar.html) | [pdf](https://raw.githack.com/htastan/Makine-Ogrenmesi/master/Sunumlar/02-Temel-Kavramlar.pdf) 
 
-Uygulama: [R Giriş](R/R-Giris.html)
-Uygulama: [Tidy Data Giriş](R/TidyR-Giris.html)
+Uygulama: [R Giriş](https://raw.githack.com/htastan/Makine-Ogrenmesi/master/R/R-Giris.html)
+Uygulama: [Tidy Data Giriş](https://raw.githack.com/htastan/Makine-Ogrenmesi/master/R/TidyR-Giris.html)
 
 3. Gözetimli Öğrenme: Regresyon Problemleri 
 
