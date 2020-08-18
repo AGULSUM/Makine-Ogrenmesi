@@ -1,0 +1,285 @@
+---
+title: "Gözetimsiz Öğrenme"
+author: "Prof. Dr. Hüseyin Taştan"
+date: "Ağustos 2020"
+output:
+  html_document: 
+    number_sections: true
+    theme: readable
+    highlight: haddock 
+    # code_folding: show
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    keep_md: true
+subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES-2020)
+institute: Yıldız Teknik Üniversitesi
+
+
+---
+<style type="text/css"> 
+body{
+  font-size: 12pt;
+}
+code.r{
+  font-size: 12pt;
+}
+</style>
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = TRUE, results = 'asis', fig.show = 'asis')
+knitr::opts_chunk$set(echo = TRUE)
+``` 
+
+<br/>
+<br/>
+
+
+# Temel Bileşenler
+
+## Örnek: USArrests 
+
+Örnek olarak ders kitabındaki (James vd, ISLR) örneğin replikasyonunu yapacağız. Bu örnek base `R`'ın bir parçası olan `USArrests`  veri kümesini kullanmaktadır. 
+```{r, echo=TRUE, results="hold", warning=FALSE} 
+library(ISLR)
+states <- row.names(USArrests) 
+names(USArrests)
+```
+
+Veri kümesinde 4 değişken vardır. Örneklem ortalamaları ve varyansları: 
+```{r}
+apply(USArrests, 2, mean)
+```
+
+```{r}
+apply(USArrests, 2, var) 
+```
+
+Temel bileşenler analizi (PCA) birkaç tane paket mevcuttur (`prcomp`, `princomp`, vb.). 
+`prcomp` paketini `scale=TRUE` opsiyonuyla kullanalım: 
+```{r}
+pr.out <- prcomp(USArrests, scale=TRUE)
+names(pr.out) 
+```
+
+Çıktı listesi `pr.out` içinde beş nesne bulunur. `center` ve `scale` değişkenlerin ortalama ve standart sapmalarını içerir (bunlar kullanılarak standardizasyon yapıldı). 
+```{r}
+pr.out$center
+```
+
+```{r, echo=TRUE, results="hold"}
+pr.out$scale
+```
+
+`rotation` matrisi temel bileşen katsayılarını içermektedir. `pr.out$rotation` matrisinin her bir sütunu temel bileşen ağırlıklarına karşılık gelir:  
+```{r}
+pr.out$rotation
+```
+
+`x` temel bileşen skor vektörlerini içeren bir matristir: 
+```{r, echo=TRUE, results="hold"}
+dim(pr.out$x)  
+head(pr.out$x)
+```
+
+İlk iki temel bileşenin grafiği (biplot): 
+```{r}
+biplot(pr.out, scale=0, cex=0.6)
+```
+
+`scale=0` opsiyonu ile okların temel bileşen katsayılarını temsil etmesi sağlanır. Yukarıdaki grafik kitaptaki grafiğin (Figure 10.1) aynadaki yansımasıdır. Bu grafiği çizmek için işaret edğişimi yapabiliriz: 
+```{r}
+pr.out$rotation <- -pr.out$rotation
+pr.out$x <- -pr.out$x
+biplot(pr.out, scale=0, cex=0.6)
+```
+
+Temel bileşenlerin önemi:  
+```{r}
+summary(pr.out)
+```
+
+Bu sonuca göre ilk temel bileşen varyansın %62'sini, ikinci temel bileşen ise %24.7'sini açıklamaktadır. İlk iki temel bileşen birlikte varyansın yaklaşık %87'sini açıklar. 
+
+Screeplot: 
+```{r}
+screeplot(pr.out, type="lines") 
+```
+
+```{r, echo=TRUE, results="hold"}
+pr.out$sdev
+pr.var <- pr.out$sdev^2
+pr.var
+pve <- pr.var/sum(pr.var)
+pve
+plot(pve, xlab="Principal Component", ylab="Proportion of Variance Explained", ylim=c(0,1),type='b')
+plot(cumsum(pve), xlab="Principal Component", ylab="Cumulative Proportion of Variance Explained", ylim=c(0,1),type='b')
+```
+## Örnek: Body Data 
+
+Vücut ölçümleri veri seti (detaylar için bkz. [http://users.stat.umn.edu/~sandy/courses/8053/Data/Bodymeasurements/datasets.heinz.html](http://users.stat.umn.edu/~sandy/courses/8053/Data/Bodymeasurements/datasets.heinz.html)): 
+```{r}
+load("Data/body.RData") 
+bodydata <- subset(body, select = -c(age, gender, gender_dummy)) 
+str(bodydata)
+```
+
+Korelasyon matrisi bu ölçümlerin birbirleriyle yüksek derecede ilişkili olduğunu gösteriyor:  
+```{r, warning=FALSE}
+library(ggcorrplot)
+cormat <- round(cor(bodydata), 2)
+ggcorrplot(cormat, hc.order = TRUE, type = "lower", outline.color = "white")
+```
+
+Body verileri için temel bileşenler: 
+```{r}
+pr.out <- prcomp(bodydata, scale=TRUE)
+summary(pr.out)  
+# change the signs of factor loadings
+pr.out$rotation <- -pr.out$rotation
+pr.out$x <- -pr.out$x
+biplot(pr.out, scale=0, cex=0.6)
+```
+
+```{r, echo=TRUE, results="hold"} 
+pr.var <- pr.out$sdev^2 
+pve <- pr.var/sum(pr.var)
+pve
+plot(pve, xlab="Principal Component", ylab="Proportion of Variance Explained", ylim=c(0,1),type='b')
+plot(cumsum(pve), xlab="Principal Component", ylab="Cumulative Proportion of Variance Explained", ylim=c(0,1),type='b')
+```
+
+İlk 4 temel bileşen verilerdeki değişkenliğin yaklaşık %84'ünü açıklamaktadır.  
+
+
+# K-Ortalamalar 
+
+## Örnek: yapay veriler 
+
+`kmeans()` fonksiyonuyla K-ortalamalar tahmini yapılabilir. Örnek olarak bir yapay veri seti oluşturalım. Bu yapay veri setinde gerçekte iki küme olsun: 
+```{r}
+set.seed(2)
+x <- matrix(rnorm(50*2), ncol=2)
+x[1:25,1]=x[1:25,1]+3
+x[1:25,2]=x[1:25,2]-4
+km.out <- kmeans(x,2,nstart=20)
+km.out$cluster
+plot(x, col=(km.out$cluster+1), main="K-Means Clustering Results with K=2", xlab="", ylab="", pch=20, cex=2) 
+```
+
+Burada gerçek küme sayısının iki olduğunu biliyoruz. Pratikte bunu genellikle bilmeyiz. Diyelim ki bunu bilmiyoruz ve K=3 için sınıflama yapıyoruz: 
+```{r}
+set.seed(4)
+km.out <- kmeans(x, 3, nstart=20)
+km.out
+plot(x, col=(km.out$cluster+1), main="K-Means Clustering Results with K=3", xlab="", ylab="", pch=20, cex=2)
+```
+K = 3 olduğu için K-ortalamalar algoritması verileri 3 öbeğe ayırdı. Yukarıdaki grafikte de görülebileceği gibi mavi renkte yeni bir grup oluştur. 
+
+K-ortalamalar algoritmasında yerel optimumdan kaçınmak için başlangıç değeri `nstart` için 20 ya da 50 gibi büyük bir değer kullanılabilir:
+```{r}
+set.seed(3)
+km.out <- kmeans(x, 3, nstart=1)
+km.out$tot.withinss
+km.out <- kmeans(x, 3, nstart=20)
+km.out$tot.withinss
+```
+
+## Örnek: Vücut ölçümleri (Body data)
+
+```{r}
+km.out <- kmeans(bodydata, 2, nstart=20)
+plot(bodydata[,1:3],col=(km.out$cluster),cex=2)
+```
+
+Kümelemeyi ağırlık (weight) ve boy (height) değişkenlerine göre görselleştirelim ve cinsiyet ile karşılaştıralım: 
+```{r} 
+# Large blank circles are the resulting clusters
+plot(bodydata[,22:23],col=(km.out$cluster),cex=2)
+# put dots inside circles representing observed gender
+# red = men, black = women
+points(body[,23:24], col=c(1,2)[body$gender], pch=19, cex=1)
+```
+```{r, echo=TRUE, results="hold"} 
+observed_class <- c(1,2)[body$gender]
+km_cluster <- km.out$cluster
+ratio <- sum(observed_class == km_cluster)/nrow(bodydata)
+ratio
+```
+
+Buna göre verilerin %84'ü doğru bir şekilde kümelenmiştir. Ancak bunu saptayabilmemizi sağlayan verilerde cinsiyet (gender) değişkeninin yer almasıdır (aslında etiketler mevcut). Bu açıdan bir sınıflandırma problemi olarak düşünülebilir. Bu örnek sadece gösterim amaçlıdır. Eğer çıktı değişkenini biliyorsak gözetimli öğrenme tekniklerini kullanmalıyız. 
+
+
+# Hiyerarşik Kümeleme
+
+## Örnek: Yapay verileri 
+
+R'da hiyerarşik kümeleme analizi için `hclust()` fonksiyonu kullanılabilir: 
+```{r}
+hc.complete <- hclust(dist(x), method="complete")
+hc.average <- hclust(dist(x), method="average")
+hc.single <- hclust(dist(x), method="single")
+par(mfrow=c(1,3))
+plot(hc.complete,main="Complete Linkage", xlab="", sub="", cex=.9)
+plot(hc.average, main="Average Linkage", xlab="", sub="", cex=.9)
+plot(hc.single, main="Single Linkage", xlab="", sub="", cex=.9)
+```
+
+```{r, echo=TRUE, results="hold"}
+cutree(hc.complete, 2)
+```
+
+```{r, echo=TRUE, results="hold"}
+cutree(hc.average, 2)
+```
+
+## Örnek: Body data 
+
+```{r}
+# exclude gender variables
+body1 <- dplyr::select(body, -c(25,26)) 
+# H.Cluster
+hcbody.complete <- hclust(dist(body1), method="complete")
+hcbody.average <- hclust(dist(body1), method="average")
+hcbody.single <- hclust(dist(body1), method="single")
+```
+
+Dendrogramlar:
+```{r}
+plot(hcbody.complete,main="Complete Linkage", xlab="", sub="", cex=.9)
+```
+
+
+```{r}
+plot(hcbody.average, main="Average Linkage", xlab="", sub="", cex=.9)
+```
+
+
+```{r}
+plot(hcbody.single, main="Single Linkage", xlab="", sub="", cex=.9)
+```
+
+
+
+
+
+```{r, echo=TRUE, results="hold"}
+cutree(hc.single, 2)
+```
+
+
+```{r, echo=TRUE, results="hold"}
+cutree(hc.single, 4)
+```
+
+To scale the variables before performing hierarchical clustering of the
+observations, we use the scale() function:
+```{r, echo=TRUE, results="hold"}
+xsc=scale(x)
+plot(hclust(dist(xsc), method="complete"), main="Hierarchical Clustering with Scaled Features")
+```
+
+
+```{r, echo=TRUE, results="hold"}
+
+```

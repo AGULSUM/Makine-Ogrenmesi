@@ -1,0 +1,352 @@
+---
+title: "Sınıflandırma Problemleri"
+author: "Prof. Dr. Hüseyin Taştan"
+date: "Ağustos 2020"
+output:
+  html_document: 
+    number_sections: true
+    theme: readable
+    highlight: haddock 
+    # code_folding: show
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    keep_md: true
+subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES-2020)
+institute: Yıldız Teknik Üniversitesi
+
+
+---
+<style type="text/css"> 
+body{
+  font-size: 12pt;
+}
+code.r{
+  font-size: 12pt;
+}
+</style>
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = TRUE, results = 'asis', fig.show = 'asis')
+knitr::opts_chunk$set(echo = TRUE)
+``` 
+
+<br/>
+<br/>
+
+
+
+# Lojistik Regresyon
+
+## Örnek: Hisse senedi piyasasının yönünü tahmin etmek 
+
+(Detaylar için bkz. James et al., ISLR, p.154)
+```{r,warning=FALSE}
+library(MASS)
+library(ISLR)
+library(tidyverse)
+
+head(Smarket) 
+```
+
+ISLR paketinde yer alan `Smarket` veri seti S&P500 endeksinin 2001-2005 dönemine ait 1250 günlük getirilerini içermektedir. `Today` sütunu bugünkü getiriyi göstermektedir. Bu değişkenin işareti, yani piyasanın yönü ise, `Direction` isimli sütundadır. `Direction` iki kategoriye sahiptir: Up (positif getiri) - Down (negatif getiri). Veri setinde ayrıca getirinin 5-günlük gecikmeli değerleri ve piyasa hacmini içeren `Volume` değişkeni yer almaktadır.  
+
+Günlük getiri grafiği: 
+```{r, echo=TRUE, results="hold"}
+Smarket %>% 
+  mutate(day=1:nrow(Smarket)) %>% 
+  ggplot(aes(x=day,y=Today)) + 
+  geom_line()
+```
+
+Kestirim sorusu: Geçmiş bilgiden hareketle piyasanın bugünkü yönünü (up ya da down) tahmin edebilir miyiz?
+```{r, echo=TRUE, results="hold"}
+n <- length(Smarket$Direction)
+table(Smarket$Direction)/n
+Smarket %>%  
+  ggplot(aes(x=Today)) + 
+  geom_histogram()
+```
+
+##  `glm()` fonksiyonu
+
+Lojistik regresyon modeli tahmin etmek için `glm()` fonksiyonunu `family = binomial` opsiyonu ile birlikte kullanabiliriz:
+```{r}
+# Logistic regression 
+glm.fit <- glm(Direction ~ Lag1 + Lag2 + Lag3 +
+                 Lag4 + Lag5 + Volume, data = Smarket, family = binomial)
+summary(glm.fit) 
+```
+
+Yukarıdaki modelde tüm değişkenleri (5 gecikme ve piyasa hacmi) modele ekledik. 
+Şimdi piyasanın yönünü `predict()` fonksiyonunu kullanarak kestirebiliriz: 
+```{r}
+glm.probs <- predict(glm.fit, type = "response")
+glm.probs[1:10] 
+```
+
+Yukarıdaki çıktıda ilk 10 gözleme ilişkin kestirim değerlerini (koşullu olasılık tahminlerini) yazdırdık. Bu koşullu olasılık tahminlerinin ait olduğu sınıfları görmek için `contrasts()` fonksiyonunu kullanabiliriz: 
+
+```{r}
+contrasts(Smarket$Direction)
+```
+
+Görüldüğü gibi kukla (dummy) değişken Up sınıfı için 1 Down için 0 değerini almaktadır. 
+
+Koşullu olasılıkları tahmin ettik. Ancak asıl amacımız sınıflandırma yapmaktı. Yani bugünkü piyasanın yönünü sınıflandırmaktı. Bunun için koşullu olasılıkları ikili kestirimlere (yukarı, aşağı) dönüştürmemiz gerekir. Derste gördüğümüz gibi 0.5 değerini aşan koşullu olasılıklar için Up, 0.5'den küçük değerler için Down kestirimi yapacağız: 
+```{r}
+# tüm elemanları "Down" olan bir n-vektör yarat
+glm.pred <- rep("Down", n)
+# 0.5 üzeri olasılıkları "Up" olarak sınıfla
+glm.pred[glm.probs>.5] = "Up"
+# kestirim ile gerçek çapraz tablo
+table(glm.pred, Smarket$Direction)
+```
+
+Modelce tahmin edilen yön ile gerçek yön arasındaki sınıflama performansını özetleyen hata matrisini (confusion matrix) de elde ettik. Buna göre ana köşegen doğru sınıflanan gözlem sayılarını, köşegen dışı elemanlar ise yanlış sınıflama sayılarını göstermektedir. Sonuçlara göre lojistik regresyon modeli 145 gün Down, 507 günü ise Up olarak doğru sınıflandırmıştır (toplam doğru sınıflanan gözlem sayısı 652). Doğru sınıflama başarı oranı ya da doğruluk oranı (accuracy rate) kolayca hesaplanabilir: 
+```{r}
+(507+145)/n
+```
+
+ya da 
+```{r}
+mean(glm.pred==Smarket$Direction)
+```
+
+Modelin doğruluk oranı yaklaşık %52.2'dir. Eğitim seti hata oranı ise 100-52.2 = %47.8'dir. 
+Bu sonuçlara göre modelin başarısı yazı-tura ile tahmin yapmaktan biraz daha iyidir. Başka bir açıdan şöyle de bakılabilir: piyasanın hep yukarı yönlü hareket edeceğini öngörsek başarı oranımız kaç olurdu? Verilerden bunun yaklaşık %51.84 (= 100*648/1250) olduğunu görüyoruz.  
+
+Ancak model performansını daha iyi değerlendirmek için kestirim hata oranını test veri setinde (verilerin eğitimde kullanılmayan kısmı) hesaplamamız gerekir. 
+
+Sınıflandırma hata matrisini hesaplamanın bir çok yolu vardır. Bunlardan biri `caret` paketinde yer alan `confusionMatrix(predictions, actual)` fonksiyonunu kullanmaktır. Bu fonksiyonun ilk girdisi modelin kestirimleri, ikinci girdisi gerçek değerlerdir. Her iki değişken de faktör değişkeni olmalı ve aynı grup tanımlarına sahip olmalıdır. 
+```{r}
+library(caret) 
+# 
+glm.pred <- as.factor(glm.pred)
+# Positive grup kuklanın = 1 değerini aldığı gruptur
+confusionMatrix(glm.pred, Smarket$Direction, positive = "Up")
+```
+
+`confusionMatrix()` fonksiyonu hata matrisinin yanı sıra çok sayıda istatistik hesaplamaktadır. Ayrıca duyarlılık (sensitivity) ve belirlilik (specificity) gibi çeşitli ölçüleri de raporlamaktadır. Piyasa yön sınıflamasınnda duyarlılık gerçek yukarı yönlü (Up) sınıflandırılan hareketlerin oranıdır, yani 507/(141+507)= 0.7824, %78.24. Belirlilik ise aşağı yönlü hareketler içinde doğru sınıflananların oranıdır: 145/(145+457)= 0.2409, %24.09. 
+
+
+
+Daha önce belirttiğimiz gibi lojistk model 457+141 = 598 günü yanlış sınıflamıştır (**eğitim hata oranı** =  % 47.8). Daha gerçekçi bir hata oranı hesaplamak için verilerin tahminde kullanılmayan kısmında hatalı sınıflama oranını hesaplamak gerekir.  
+
+Bu amaçla, veri setinin 2001-2004 yıllarına ait kısmını eğitim veri seti, 2005 yılını ise test veri seti olarak ayıracağız. 
+```{r}
+# Eğitim veri seti indikatörü yarat
+train <- (Smarket$Year<2005)
+# test verileri 
+Smarket.2005 <- Smarket[!train,]
+dim(Smarket.2005)
+# test verilerinde gözlemlenen piyasa yönü: 
+Direction.2005 <- Smarket$Direction[!train]
+```
+
+Yukarıdaki kod parçasında `train`  `TRUE` veya `FALSE` elemanları olan bir mantıksal vektördür. Şimdi modelimizi eğitim veri setiyle tekrar tahmin ediyoruz: 
+```{r}
+# modeli eğitim verisiyle tahmin et 
+glm.fit <- glm(Direction ~ Lag1 + Lag2 + Lag3 + Lag4 + Lag5 + Volume, data = Smarket,
+               family = binomial, subset = train)
+```
+
+Yukarıda `glm()` fonksiyonu içinde eğitim setini gösteren `subset = train` opsiyonunu kullandığımıza dikkat ediniz. 
+
+Şimdi test setinde kestirimleri yapalım: 
+```{r}
+# test verisinde tahmin edilen olasılıklar
+glm.probs <- predict(glm.fit, Smarket.2005, type = "response")
+```
+
+Model ne kadar başarılı? Bunu sadece test verileri içinde ölçeceğiz:  
+```{r}
+glm.pred <- rep("Down", 252)
+# classify probs>0.5 as up
+glm.pred[glm.probs>.5] <- "Up"
+# table: 
+table(glm.pred,Direction.2005)
+```
+
+```{r}
+# % correctly predicted
+mean(glm.pred == Direction.2005)
+
+# % incorrect -- error rate
+mean(glm.pred != Direction.2005)
+```
+
+Test hata oranı yaklaşık %52 olarak tahmi edildi. Açıktır ki bu tesadüfi tahminden daha kötüdür. Bu sonuçlara göre Etkin Piyasa Hipotezi geçerlidir diyebilir miyiz?
+
+<br/>
+<br/>
+Yukadıra tahmin ettiğimiz model tüm değişkenleri içeriyordu. Şimdi en yakın 2 gecikmeyi içeren daha küçük bir model tahmin edelim:  
+```{r}
+glm.fit <- glm(Direction ~ Lag1 + Lag2, data=Smarket, family=binomial, subset=train)
+glm.probs <- predict(glm.fit, Smarket.2005, type="response")
+glm.pred <- rep("Down",252)
+glm.pred[glm.probs>.5] <- "Up"
+table(glm.pred, Direction.2005)
+mean(glm.pred == Direction.2005) 
+```
+
+Gözlemlerin %56'sı doğru olarak sınıflandırıldı. Ufak bir artış görülse de her gün için artış öngören naif sınıflandırma da  %56 başarı oranına sahiptir. 
+
+Belirli değerler için öngörü hesaplamak için: 
+```{r, echo=TRUE, results="hold"}
+predict(glm.fit, newdata = data.frame(Lag1=c(1.2,1.5),Lag2=c(1.1,-0.8)), type="response")
+```
+
+# Lineer Diskriminant Analizi (LDA) 
+
+Derste gördüğümüz gibi doğrusal diskriminant analizi kategorik tepki değişkeni $Y$'yi her grupta ayrı ayrı modelliyor ve daha sonra koşullu olasılığı $Pr(Y|X)$ tahmin etmek için Bayes teoremini kullanıyordu. LDA analizi ile yapılan sınıflandırma ile doğrusal olasılık modeli ile yapılan sınıflama aynı sonucu vermektedir.  
+
+## Örnek: Piyasanın yönünü öngörmek
+
+Yukarıda lojistik regresyonda  kullandığımız örneği LDA için tekrarlayalım. `R`'da LDA tahmini için `lda()` fonksiyonunu kullanabiliriz. Modelde sadece iki gecikmeyi kullanacağız. Eğitim verisi için tahmin sonuçları:  
+```{r}
+library(MASS)
+lda.fit <- lda(Direction ~ Lag1 + Lag2, data = Smarket, subset = train)
+lda.fit
+plot(lda.fit)
+```
+
+Eğitim setindeki öncül (prior) olasılıklar "Down" için 0.492, "Up" için ise 0.508'dir. Bu olasılıklar doğrudan verilerdeki sıklıklar üzerinden hesaplanmıştır. LDA çıktısında ayrıca her grup için kestirim değişkenlerinin (Lag1 ve Lag2) ortalamaları yer almaktadır. 
+
+LDA diskriminant fonksiyonunu katsayılarından hareketle karar kuralı:  $-0.642\times Lag1-0.514\times Lag2$ büyükse LDA yukarı yönlü hareket tahmin eder, küçükse aşağı yönlü hareket tahmin eder. LDA tahmininden sonra `plot()` fonksiyonu bu doğrusal diskriminantların eğitim verilerinden hareketle grafiğini çizmektedir. 
+
+
+
+Şimdi test verileri ile kestirimleri oluşturalım: 
+```{r}
+lda.pred <- predict(lda.fit, Smarket.2005)
+names(lda.pred)
+```
+
+LDA `predict()` fonksiyonu 3 elemanlı bir liste oluşturur. Birinci eleman, `class`, piyasa yönüne ilişkin LDA tahminlerini içerir. İkinci eleman,  `posterior`, ardıl olasılıkları içeren bir matristir. Üçüncü eleman, `x` ise lineer diskriminantları içerir. 
+
+
+LDA kestirimlerinin hata matrisi: 
+```{r}
+lda.class <- lda.pred$class
+table(lda.class, Direction.2005)
+mean(lda.class==Direction.2005)
+```
+
+Bu sonuç lojistik regresyon ile aynıdır. 
+
+
+# Karesel Diskriminant Analizi (QDA) 
+
+ 
+
+## QDA Örnek: Piyasa yönünün tahmini
+
+Karesel diskriminant tahmini için `qda()` fonksiyonu kullanılabilir: 
+```{r}
+qda.fit <- qda(Direction ~ Lag1 + Lag2, data = Smarket, subset = train)
+qda.fit
+```
+
+Kestirimlerin hesaplanması için LDA analizindeki gibi `predict()` fonksiyonu kullanılabilir: 
+```{r}
+qda.class <- predict(qda.fit, Smarket.2005)$class
+table(qda.class,Direction.2005)
+mean(qda.class==Direction.2005)
+```
+
+QDA tahmininin başarı oranı yaklaşık %60'dır. Bu model diğer iki modele göre daha başarılı diyebilir miyiz? 
+
+
+# K En Yakın Komşu (KNN)
+
+## KNN Örnek: Piyasa yönü 
+
+`class` paketinin bir parçası olan `knn()` fonksiyonu ile KNN kestirimleri oluşturulabilir: 
+```{r}
+library(class)
+```
+
+**Syntax**: 
+```{r, echo=TRUE, eval=FALSE}
+knn(train, test, cl, k = 1,...)
+```
+
+Girdiler: 
+
+`train`: eğitim verilerini içeren matris ya da data frame 
+
+`test`: test verilerini içeren matris ya da data frame. 
+
+`cl`: eğitim setindeki gerçek sınıflandırmayı gösteren faktör değişkeni 
+
+`k`: komşu sayısı (number of neighbours considered).
+
+Daha detaylı açıklamalar için help dosaysına bakınız (`?knn`). 
+
+<br/>
+Önce eğitim ve test setindeki kestirim değişkenlerini içeren matrisleri oluşturalım. Ayrıca eğitim setindeki gerçek sınıflandırmayı gösterin değişkeni yaratalım (`train.Direction`) 
+```{r} 
+train.X <- cbind(Smarket$Lag1, Smarket$Lag2)[train,]
+test.X <- cbind(Smarket$Lag1, Smarket$Lag2)[!train,]
+train.Direction <- Smarket$Direction[train]
+```
+
+Şimdi k=1 ile KNN tahmini yapalım:  
+```{r}
+set.seed(1)
+knn.pred <- knn(train.X, test.X, train.Direction, k=1)
+table(knn.pred, Direction.2005)
+(83+43)/252
+```
+
+k=1 için doğruluk oranı %50.  k=3 için tekrar tahmin edelim:  
+```{r}
+knn.pred <- knn(train.X, test.X, train.Direction, k=3)
+table(knn.pred, Direction.2005)
+mean(knn.pred==Direction.2005)
+```
+
+Doğru tahmin oranı biraz artarak %53.6 oldu. 
+
+k=5 için: 
+```{r}
+knn.pred <- knn(train.X, test.X, train.Direction, k=5)
+table(knn.pred, Direction.2005)
+mean(knn.pred==Direction.2005)
+```
+
+Öncekine göre daha başarısız çıktı. Daha yüksek k değerleri için modelin başarısı değişiyor mu? Alıştırma olarak gösteriniz. 
+
+# Alıştırma: Default veri seti 
+
+Derst bazı kavramların açıklanmasında  `Default` veri setini kullandık. `Default` simülasyonla oluşturulmuş pedagojik amaçlı bir veri setidir. Kitaptaki adımları takip ederek  sonuçların replikasyonunu yapınız. Burada amaç bireylerin borç ödememe durumunun (default) (YES/NO) kestirilmesidir. Bu amaçla kullanılan modeller: lojistik regresyon, LDA, QDA, ve KNN (k=1,2,3 için). 
+
+```{r}
+library(ISLR)
+data(Default)
+contrasts(Default$default)
+summary(Default)
+```
+
+Lojistik regresyon tahmini
+```{r, echo=TRUE, results="hold"}
+# Logistic regression 
+logit.default <- glm(default ~ balance + income + student, data=Default, family=binomial)
+summary(logit.default ) 
+```
+
+Şimdi kestirimleri oluşturarak hata matrisini tahmin ediniz:  
+```{r, echo=TRUE, results="hold"}
+# Kodlarınızı buraya yazabilirsiniz
+
+```
+
+LDA tahmini yaparak s.145 Table 4.4'ü oluşturunuz: 
+```{r, echo=TRUE, results="hold"}
+# Kodlarınızı buraya yazabilirsiniz
+# Tablo 4.4 
+```
+
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;"></div> 
+

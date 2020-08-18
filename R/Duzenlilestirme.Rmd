@@ -1,0 +1,370 @@
+---
+title: "Düzenlileştirme"
+author: "Prof. Dr. Hüseyin Taştan"
+date: "Ağustos 2020"
+output:
+  html_document: 
+    number_sections: true
+    theme: readable
+    highlight: haddock 
+    # code_folding: show
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    keep_md: true
+subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES-2020)
+institute: Yıldız Teknik Üniversitesi
+
+
+---
+<style type="text/css"> 
+body{
+  font-size: 12pt;
+}
+code.r{
+  font-size: 12pt;
+}
+</style>
+
+```{r setup, include=FALSE}
+# knitr::opts_chunk$set(echo = TRUE, results = 'asis', fig.show = 'asis')
+knitr::opts_chunk$set(echo = TRUE)
+``` 
+
+<br/>
+<br/>
+
+
+# Ridge Regresyonu 
+
+`glmnet` paketiyle Ridge ve LASSO modelleri tahmin edilebilir. Bu paketteki temel fonksiyon olan  `glmnet()` sadece vektör ve matrisleri girdi olarak kabul etmektedir. Bu nedenle şimdiye kadar kullandığımız `y ~ x` regresyon modeli yapısını kullanmayacağız. Önce çıktı değişkenini içeren bir `y` vektörü ve kestirim değişkenlerini içeren bir `x` matrisi oluşturacağız. Verilerde eğer varsa kayıp gözlemler silinmelidir. `x` ve `y`'nin oluşturulmasında `model.matrix()` fonksiyonu kullanılabilir. Örnek olarak `Credit` verilerinde `Balance` değişkeni için bir doğrusal regresyon modeli kurmak istediğimizi düşünelim:  
+```{r}
+library(ISLR)
+x <- model.matrix(Balance ~ . -ID, Credit)[,-1]
+y <- Credit$Balance 
+```
+
+
+`x` matrisi birler sütununu içermez:  
+```{r, echo=TRUE, results="hold"}
+head(x) 
+```
+
+`model.matrix()` fonksiyonu kategorik değişkenleri otomatik olarak kukla değişkenlere dönüştürmektedir. `glmnet()` sadece nicel değişkenleri girdi olarak kabul eder. 
+
+`glmnet()` fonksiyonunun üçünca girdisi, `alpha`, hangi modelin tahmin edileceğini belirler. Ridge regresyonu için `alpha=0`, LASSO için `alpha=1` değeri girilmelidir. 
+
+Ridge modelini tahmin edelim:
+```{r, warning=FALSE}
+library(glmnet)
+grid <- 10^seq(10,-2,length=100)
+ridge.mod <- glmnet(x, y, alpha=0, lambda=grid)
+```
+
+Ayarlama parametresi $\lambda$ $\lambda=10^{10}$ ile  
+$\lambda=10^{-2}$ arasında değerler almaktadır (isenirse default değerler de kullanılabilir). Bu grid değerleri tüm olanaklı modelleri kapsamaktadır. `glmnet()` değişkenleri otomatik olarak standardize eder. 
+
+Her bir $\lambda$ değeri için elimizde bir katsayı kümesi vardır: 
+```{r}
+dim(coef(ridge.mod)) 
+```
+
+Örneğimizde her bir değişkene karşılık gelen 11 model ve hiç bir değişken içermeyen 1 model vardır (toplamda 12 model). Belirli bir `lambda` değerine karşılık gelen katsayıları görmek için
+```{r}
+ridge.mod$lambda[50]
+coef(ridge.mod)[,50] 
+```
+
+Yukarıda $\lambda = 11497.57$ değerine karşılık gelen katsayılar listelendi. Bunu daha küçük bir `lambda` değeriyle karşılaştıralım: 
+
+```{r}
+ridge.mod$lambda[60]
+coef(ridge.mod)[,60] 
+```
+
+Katsayıların mutlak olarak daha büyük olduğuna dikkat ediniz. 
+
+Ridge tahmininden sonra `predict()` komutunu kullanarak verilmiş bir `\lambda` için katsayıları görebilir ve kestirimleri oluşturabiliriz. Örneğin $\lambda=5$ için katsayılar:  
+```{r}
+predict(ridge.mod, s=5, type = "coefficients")
+```
+
+$\lambda=0$ için katsayılar: 
+```{r}
+predict(ridge.mod, s=0, type = "coefficients")
+```
+
+Bunu OLS ile kıyaslayınız: 
+```{r}
+coefficients(lm(Balance ~ . -ID, data=Credit))
+```
+
+
+
+Şimdi verileri eğitim ve test olmak üzere ikiye ayıralım ve ridge regresyonunun test hatasını tahmin edelim.  
+```{r}
+# eğitim ve test kümeleri
+set.seed(1)
+train <- sample(1:nrow(x), nrow(x)/2)
+test <- (-train)
+y.test <- y[test] 
+```
+
+Sadece eğitim verilerini kullanarak ridge regresyonunu tahmin edelim. 
+Test kestirimlerini $\lambda=5$ için hesaplayacağız. `predict()` fonksiyonunda `type="coefficients"` yerine `newx` girdisini kullanacağız: 
+```{r}
+ridge.mod <- glmnet(x[train,], y[train], alpha=0, lambda=grid, thresh=1e-12)
+ridge.pred <- predict(ridge.mod, s=5, newx=x[test,])
+mean((ridge.pred - y.test)^2) 
+```
+
+Test MSE 10364.53 olarak tahmin edildi. Kıyaslamak için hiç `x` değişkeninin olmadığı (yani en iyi kestirimin `y`'nin aritmetik ortalaması olduğu) bir model için MSE değerini hesaplayalım: 
+```{r}
+mean((mean(y[train]) - y.test)^2) 
+```
+
+`lambda` için çok büyük değer kullansaydık aynı değeri elde ederdik: 
+```{r}
+ridge.pred <- predict(ridge.mod, s=1e10, newx=x[test,])
+mean((ridge.pred-y.test)^2) 
+```
+
+$\lambda=5$ ile tahmin ettiğimiz model sadece sabitin olduğu boş modele göre daha düşük bir test MSE değeri verdi. Acaba OLS tahminine kıyasla ridge regresyonu kurmanın bir avantajı var mı?  $\lambda=0$ değerinin OLS sonucunu vereceğini biliyoruz: 
+```{r}
+ridge.pred <- predict(ridge.mod, s=0, newx=x[test,], exact=T, x=x[train,], y=y[train])
+mean((ridge.pred - y.test)^2) 
+```
+
+Bu sonuca göre ridge test hatası daha düşüktür. Katsayıları karşılaştıralım: : 
+```{r}
+lm(y~x, subset=train)
+predict(ridge.mod,s=0,exact=T,type="coefficients",x=x[train,],y=y[train])[1:12,] 
+```
+
+
+Yukarıdaki hesaplamalarda keyfi bir $\lambda$ değeri kullandık. Bu ayarlama parametresinin optimal seçiminde çapraz geçerleme yöntemini kullanabiliriz. Daha önce gördüğümüz `cv.glmnet()` fonksiyonunu bu amaçla kullanabiliriz. (default K=10)  
+
+```{r}
+set.seed(1)
+cv.out <- cv.glmnet(x[train,], y[train], alpha=0, lambda=grid)
+plot(cv.out)
+bestlam <- cv.out$lambda.min
+bestlam 
+```
+
+En küçük çapraz geçerleme test hatasını veren değer $\lambda=0.01$. Buna karşılık gelen test MSE değeri: 
+```{r}
+ridge.pred <- predict(ridge.mod, s=bestlam, newx=x[test,])
+mean((ridge.pred - y.test)^2) 
+```
+
+
+Tercih edilen model: 
+```{r}
+out <- glmnet(x, y, alpha=0)
+predict(out, type="coefficients", s=bestlam)[1:12,] 
+```
+
+Dikkat edilirse hiç bir katsayı tam olarak 0 değildir. Ridge regresyonu değişken seçimi yapmaz. 
+Bu amaçla LASSO kullanılabilir. 
+
+# LASSO 
+
+`glmnet()` fonksiyonunda `alpha=1` opsiyonu LASSO tahmini yapar: 
+```{r}
+lasso.mod <- glmnet(x[train,], y[train], alpha=1, lambda=grid) 
+#  plot(lasso.mod) 
+```
+
+
+Çapraz geçerleme ile `lambda` seçimi:  
+```{r, echo=TRUE, results="hold"}
+set.seed(1)
+cv.out <- cv.glmnet(x[train,], y[train], alpha=1, lambda=grid)
+plot(cv.out)
+bestlam <- cv.out$lambda.min
+bestlam
+lasso.pred <- predict(lasso.mod, s=bestlam, newx=x[test,])
+mean((lasso.pred - y.test)^2) 
+```
+
+
+En iyi `lambda` ile kurulan model: 
+```{r, echo=TRUE, results="hold"}
+# out <- glmnet(x,y,alpha=1,lambda=grid)
+out <- glmnet(x,y,alpha=1)
+lasso.coef <- predict(out, type="coefficients", s=bestlam)[1:12,]
+lasso.coef 
+```
+
+
+LASSO modelinde de (bu veri seti için) hiç bir katsayı tam olarak 0 değil. 
+```{r}
+lasso.coef[lasso.coef!=0] 
+```
+
+Yeterince büyük `lambda` değerleri bazı katsayıların 0 olmasıyla sonuçlanır. Örneğin:  
+```{r} 
+out <- glmnet(x, y, alpha = 1)
+lasso.coef <- predict(out, type="coefficients", s=10)[1:12,]
+lasso.coef  
+```
+
+Bu durumda son model evlilik ve etnik köken kuklalarını dışlar: 
+```{r, echo=TRUE, results="hold"}
+lasso.coef[lasso.coef!=0] 
+```
+
+
+# Örnek 
+
+Bu örnek kısmi olarak ISLR ders kitabındak 8. alıştırmaya (s.262) dayanmaktadır. 
+Önce doğru modelin 3. derece bir polinom olduğu bir veri seti oluşturacağız. Yani doğru model 3 değişken içerecek. Ancak veri setinde 10 değişken olacak. Hangilerinin modele girmesi gerektiğini bilmediğimizi varsayacağız. 
+
+## Veri setinin simülasyonu
+
+```{r, echo=TRUE, results="hold"}
+set.seed(99) # for replication
+n   <- 400
+x   <- rnorm(n, mean=0, sd=1)
+eps <- rnorm(n, mean=0, sd=1)
+f   <- 5  +1*x - 2*x^2 - 1*x^3  
+y   <- f + eps
+df <- data.frame(y, x1=x, x2=x^2, x3=x^3, x4=x^4, x5=x^5, x6=x^6,
+            x7=x^7, x8=x^8, x9=x^9, x10=x^10)
+
+# df <- data.frame(y, x1=x, x2=x^2, x3=x^3, x4=x^4, x5=x^5, x6=rnorm(n),
+#              x7=rnorm(n), x8=rnorm(n), x9=rnorm(n), x10=rnorm(n),
+#              x11=runif(n), x12=runif(n), x13=runif(n), x14=runif(n),
+#              x15=runif(n))
+head(df) 
+
+library(ggplot2)
+ggplot(df, aes(x=x1,y=y))+
+  geom_point() +
+  geom_line(aes(x1,f))
+```
+
+## En iyi altküme seçimi (Best subset selection)
+
+```{r, warning=FALSE}
+library(leaps)
+regfit.full <- regsubsets(y ~ ., data = df, nvmax = 10)
+#summary(regfit.full) 
+```
+
+Veri-bazlı bilgi ölçütleri (Akaike, BIC, Cp, Adj.R2, RSS)
+```{r, echo=TRUE, results="hold"}
+reg.summary <- summary(regfit.full)
+
+# 2x2 plot grid
+par(mfrow=c(2,2))
+# plot RSS
+plot(reg.summary$rss, xlab="Number of Variables", xaxt="n", ylab="RSS", type="o")
+axis(1, at = seq(1, 10, by = 1),las=2)
+
+# plot Adj.R2
+plot(reg.summary$adjr2, xlab="Number of Variables", xaxt="n", ylab="Adjusted RSq",type="o")
+axis(1, at = seq(1, 10, by = 1),las=2)
+# find the model with max Adj.R2
+best <- which.max(reg.summary$adjr2)
+# put red dot on the graph that marks the best according to Adj.R2 
+points(best, reg.summary$adjr2[best], col="red", cex=2, pch=20)
+
+# plot Cp
+plot(reg.summary$cp, xlab="Number of Variables", xaxt="n", ylab="Cp",type='o')
+axis(1, at = seq(1, 10, by = 1),las=2)
+# find the best according to Cp
+bestCp <- which.min(reg.summary$cp)
+points(bestCp, reg.summary$cp[bestCp], col="red", cex=2, pch=20)
+
+# plot BICs
+plot(reg.summary$bic, xlab="Number of Variables", xaxt="n", ylab="BIC", type='o')
+bestBIC <- which.min(reg.summary$bic)
+points(bestBIC, reg.summary$bic[bestBIC], col="red", cex=2, pch=20) 
+axis(1, at = seq(1, 10, by = 1),las=2)
+```
+
+```{r, echo=TRUE, results="hold"}
+regfit.fwd <- regsubsets(y ~ ., data = df, nvmax=10, method="forward")
+reg.fwd.summary <- summary(regfit.fwd)
+reg.fwd.summary
+```
+
+```{r, echo=TRUE, results="hold"}
+regfit.bwd <- regsubsets(y ~ ., data = df, nvmax=10, method="backward")
+reg.bwd.summary <- summary(regfit.bwd)
+reg.bwd.summary
+```
+
+
+```{r, echo=TRUE, results="hold"}
+coef(regfit.full, 3)
+coef(regfit.fwd, 3)  
+coef(regfit.bwd, 3)
+```
+
+Cp ölçütüne göre en iyi model: 
+```{r, echo=TRUE, results="hold"}
+coef(regfit.full, which.min(reg.summary$cp))
+coef(regfit.fwd, which.min(reg.fwd.summary$cp)) 
+coef(regfit.bwd, which.min(reg.bwd.summary$cp))
+```
+
+BIC ölçütüne göre en iyi model:  
+```{r, echo=TRUE, results="hold"}
+coef(regfit.full, which.min(reg.summary$bic))
+coef(regfit.fwd, which.min(reg.fwd.summary$bic)) 
+coef(regfit.bwd, which.min(reg.bwd.summary$bic))
+```
+
+Adj. R2 ölçütüne göre en iyi model: 
+```{r, echo=TRUE, results="hold"}
+coef(regfit.full, which.max(reg.summary$adjr2))
+coef(regfit.fwd, which.max(reg.fwd.summary$adjr2)) 
+coef(regfit.bwd, which.max(reg.bwd.summary$adjr2))
+```
+
+## LASSO ve çapraz geçerleme
+
+```{r, echo=TRUE, results="hold"}
+x <- model.matrix(y ~ ., df)[,-1]
+y <- df$y 
+```
+
+```{r, echo=TRUE, results="hold"}
+set.seed(666)
+train <- sample(1:nrow(x), nrow(x)/2)
+test <- (-train)
+y.test <- y[test] 
+```
+
+```{r, echo=TRUE, results="hold"}
+library(glmnet)
+lasso.mod <- glmnet(x[train,], y[train], alpha=1)
+plot(lasso.mod) 
+```
+
+`lambda` için çapraz geçerleme: 
+```{r, echo=TRUE, results="hold"}
+set.seed(1)
+cv.out <- cv.glmnet(x[train,], y[train], alpha=1)
+plot(cv.out)
+bestlam <- cv.out$lambda.min
+bestlam
+lasso.pred <- predict(lasso.mod, s=bestlam, newx=x[test,])
+mean((lasso.pred - y.test)^2) 
+```
+The variables x4-x10 are all zeros: 
+```{r, echo=TRUE, results="hold"}
+out <- glmnet(x,y,alpha=1)
+lasso.coef <- predict(out, type="coefficients", s=bestlam)[1:11,]
+lasso.coef 
+```
+
+```{r, echo=TRUE, results="hold"}
+# sprintf("%.5f",lasso.coef[lasso.coef!=0])
+lasso.coef[abs(lasso.coef)>0.0001]
+```
+
+

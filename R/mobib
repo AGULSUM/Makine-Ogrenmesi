@@ -1,0 +1,87 @@
+@BOOK{ISL2017,
+  AUTHOR =       {James, Gareth and Daniela Witten and Trevor Hastie and Robert Tibshirani},
+  TITLE =        {An Introduction to Statistical Learning: with Applications in R},
+  PUBLISHER =    {Springer},
+  YEAR =         {2017},
+  address =      {New York},
+  edition =      {7th ed.},
+}
+
+@inbook{Athey2018, 
+ title = "The Impact of Machine Learning on Economics",
+ author = "Susan Athey",
+ BookTitle = "The Economics of Artificial Intelligence: An Agenda",
+ Publisher = "University of Chicago Press",
+ pages = "507-547",
+ year = "2018",
+ month = "January",
+ URL = "http://www.nber.org/chapters/c14009",
+}
+@book{NBERagra-1,
+ title = "The Economics of Artificial Intelligence: An Agenda",
+ author = "Ajay Agrawal and Joshua Gans and Avi Goldfarb",
+ institution = "National Bureau of Economic Research",
+ type = "Book",
+ publisher = "University of Chicago Press",
+ year = "2019",
+ doi = {https://doi.org/10.7208/chicago/9780226613475.001.0001},
+ URL = "http://www.nber.org/books/agra-1",
+}
+
+@article{Kleinberg-etal2015,
+Author = {Kleinberg, Jon and Ludwig, Jens and Mullainathan, Sendhil and Obermeyer, Ziad},
+Title = {Prediction Policy Problems},
+Journal = {American Economic Review},
+Volume = {105},
+Number = {5},
+Year = {2015},
+Month = {May},
+Pages = {491-95},
+DOI = {10.1257/aer.p20151023},
+URL = {http://www.aeaweb.org/articles?id=10.1257/aer.p20151023}
+}
+
+@article{Varian2014,
+Author = {Varian, Hal R.},
+Title = {Big Data: New Tricks for Econometrics},
+Journal = {Journal of Economic Perspectives},
+Volume = {28},
+Number = {2},
+Year = {2014},
+Month = {May},
+Pages = {3-28},
+DOI = {10.1257/jep.28.2.3},
+URL = {http://www.aeaweb.org/articles?id=10.1257/jep.28.2.3}
+}
+
+@book{Wickham-ggplot,
+   title =     {ggplot2: Elegant Graphics for Data Analysis},
+   author =    {Hadley Wickham},
+   publisher = {Springer},
+   isbn =      {331924275X,9783319242750},
+   year =      {2016},
+   series =    {Use R!},
+   edition =   {2nd ed. 2016},
+   volume =    {}
+}
+@book{R-cookbook},
+   title =     {R cookbook: proven recipes for data analysis, statistics, and graphics},
+   author =    {Long, J. D.; Teetor, Paul},
+   publisher = {O'Reilly Media},
+   isbn =      {9781492040682,1492040681},
+   year =      {2019},
+   series =    {},
+   edition =   {Second edition},
+   volume =    {}
+}
+@book{Rgraphics-cookbook},
+   title =     {R Graphics Cookbook Practical Recipes for Visualizing Data},
+   author =    {Winston Chang},
+   publisher = {O’Reilly Media},
+   isbn =      {9781491978603},
+   year =      {2018},
+   series =    {},
+   edition =   {2},
+   volume =    {}
+}
+
