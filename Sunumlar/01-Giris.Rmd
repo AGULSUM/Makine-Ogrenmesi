@@ -1,7 +1,6 @@
 ---
 title: "Giriş"
-author: "Hüseyin Taştan"
-date: "Ağustos 2020"
+author: "Hüseyin Taştan" 
 output:
   xaringan::moon_reader:
     css: [default, metropolis]

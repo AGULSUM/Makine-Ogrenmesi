@@ -1,7 +1,6 @@
 ---
 title: "R: Giriş"
-author: "Prof. Dr. Hüseyin Taştan"
-date: "Ağustos 2020"
+author: "Prof. Dr. Hüseyin Taştan" 
 output:
   html_document: 
     number_sections: true
