@@ -1,7 +1,7 @@
 ---
 title: "Model Değerlendirme ve Geçerleme"
 author: "Hüseyin Taştan"
-date: "Ağustos 2020"
+# date: "Ağustos 2020"
 output:
   xaringan::moon_reader:
     css: [default, metropolis]
@@ -15,8 +15,8 @@ output:
   html_document:
     df_print: paged
   pdf_document: default
-subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-EYS)
-institute: Yıldız Technical University
+subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES-2020)
+institute: Yıldız Teknik Üniversitesi
 ---
 class: my-medium-font
 
@@ -38,12 +38,16 @@ class: my-medium-font
 
 
 
-# Konular
+# Plan
 
 - Test Hatasının Tahmini 
+
 - Geçerleme (Validation)
+
 - Çapraz Geçerleme (Cross Validation)
+
 - Biri-Hariç Çapraz Geçerleme 
+
 - $k$-Katlı Çapraz Geçerleme
 
 ---
@@ -149,7 +153,7 @@ $$\mathrm{CV}_{(k)}=\frac{1}{k} \sum_{i=1}^{n} Err_i$$
 ---
 # Zaman Serisi Verileri 
 * Zaman serisi verileriyle öngörü modellerin örneklem-dışı (out-of-sample) öngörü başarısı değerlendirilirken iki yaklaşım benimsenebilir.
-* Geleneksel Yaklaşı ve Çapraz Geçerleme Yaklaşımı
+* Geleneksel Yaklaşım ve Çapraz Geçerleme Yaklaşımı
 * Zaman serileri genellikle türdeş ve bağımsız (iid) olmaz. Ayrıca verilerdeki kronolojik yapının bozulmaması gerekir. Bu nedenle rassal örneklemeyle çapraz geçerleme yapamayız. 
 
 **Geleneksel Yaklaşım**

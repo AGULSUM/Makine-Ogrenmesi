@@ -123,6 +123,8 @@ table(tree.pred, High.test)
 (97+58)/200
 ```
 
+<br/>
+
 # R ile Regresyon Ağaçları
 
 Örnek olarak `MASS` paketinde yer alan `Boston` ev fiyatları verisini kullanacağız. Bağımlı değişken medyan ev fiyatları (`medv`). Eğitim verilerinde ağaç tahmini: 
@@ -140,7 +142,8 @@ Yukarıdaki çıktıya göre ağaçta 4 değişken year alıyor: "rm"    "lstat"
 plot(tree.boston)
 text(tree.boston, pretty=0)
 ```
-`lstat`: sosyoekonomik statüsü düşük olan bireylerin oranı. Bu değişkenin düşük olduğu yerlerde evler daha pahalıdır. 
+
+`lstat`: sosyoekonomik statüsü düşük olan hanelerin oranı. Bu değişkenin düşük olduğu yerlerde evler daha pahalıdır. 
 
 
 Ağacın budanması: 
@@ -166,6 +169,9 @@ mean((yhat-boston.test)^2)
 ```
 Test MSE = 18.93.  
 
+
+<br/>
+
 # Bagging ve Rassal Ormanlar 
 
 Örnek veri seti = `Boston`. Bagging ve rassal ormanlar için R `randomForest` 
@@ -177,13 +183,14 @@ bag.boston <- randomForest(medv ~ ., data = Boston, subset=train, mtry=13, impor
 bag.boston
 ```
 
-`mtry=13` opsiyonu = 13 değişkenin hepsi her ayırımda dikkate alınacak (bagging). Modelin test setindeki performansı 
+`mtry=13` opsiyonu: 13 değişkenin tamamı her ayırımda dikkate alınacak (bagging). Modelin test setindeki performansı: 
 ```{r}
 yhat.bag <- predict(bag.boston, newdata = Boston[-train,])
 plot(yhat.bag, boston.test)
 abline(0,1)
 mean((yhat.bag-boston.test)^2)
 ```
+
 Test MSE = 10.13872. 
 
 `randomForest()` fonksiyonunda `ntree` opsiyonu ile ağacın büyüklüğünü değiştirebiliriz:
@@ -215,6 +222,7 @@ varImpPlot(rf.boston)
 
 Sonuçlara göre bölgenin refah düzeyi (`lstat`) ve ev büyüklüğü (`rm`) en önemli değişkenlerdir. 
 
+<br/>
 
 # Boosting 
 
@@ -255,13 +263,15 @@ mean((yhat.boost-boston.test)^2)
 
 Bu durumda MSE daha yüksek çıkmıştır. 
 
+<br/>
+
 # Örnek: Titanic 
 
-Bu örnekte Titanic kazasında ölenleri sınıflandıracağız, bkz. [RMS Titanic](https://en.wikipedia.org/wiki/RMS_Titanic). Bu trajik kaza çok fazla kişinin ölümü ile sonuçlanmıştır. Böyle kazaların tekrar yaşanmaması için çok sayıda güvenlik tedbirlerinin alınmasına ve yasal düzenleme yapılmasında etkili olmuştur. 
+Bu örnekte Titanic kazasında hayatını kaybedenler için bir sınıflandırma ağacı oluşturmaya çalışacağız (detaylar için bkz. [RMS Titanic](https://en.wikipedia.org/wiki/RMS_Titanic) ). Bu trajik kaza çok fazla kişinin ölümü ile sonuçlanmıştır. Böyle kazaların tekrar yaşanmaması için çok sayıda güvenlik tedbirlerinin alınmasında ve yasal düzenleme yapılmasında etkili olmuştur. 
 
 Sorular: acaba bu kadar kişinin ölümünün ardındaki nedenler nelerdir? Hangi değişkenler bireyin hayatta kalma olasılığı üzerinde önemli bir etkiye sahiptir?
 
-Bu problemi bir sınıflandırma problemi olarak ele alacağız. Önce verileri `R`'a tanıtalım: 
+Önce verileri `R`'a tanıtalım: 
 ```{r, warning=FALSE}
 library(tidyverse)
 library(modelr)
@@ -318,9 +328,9 @@ mean(prederror1, na.rm = TRUE)
 # 1 - mean(predict(titanic_tree) == titanic_tree_data$Survived, na.rm = TRUE)
 ```
 
-Bu basit ağaçla bile hata oranı yaklaışk % 21. 
+Bu basit ağaçla bile hata oranı yaklaşık % 21. 
 
-Ek öznitelikleri de kullanarak daha karmaşık bir ağaç tahmin edelim. Önce karakter değişkenleri faktör değişkenine dönüştürelim: 
+Veri setinde yer alan diğer öznitelikleri de kullanarak daha karmaşık bir ağaç tahmin edelim. Önce karakter değişkenleri faktör değişkenine dönüştürelim: 
 ```{r}
 titanic_tree_full_data <- titanic %>%
   mutate(Survived = if_else(Survived == 1, "Survived",
@@ -349,6 +359,7 @@ Hata oranı:
 1 - mean(predict(titanic_tree_full) == titanic_tree_data$Survived,
          na.rm = TRUE)
 ```
+
 Hata oranı daha da düştü, %18.3. 
 
 
@@ -387,7 +398,7 @@ knitr::kable(titanic_rf$finalModel$confusion)
 
 
 ```{r, echo=TRUE, results="hold"}
-# look at an indiividual tree
+# look at an individual tree
 randomForest::getTree(titanic_rf$finalModel, labelVar = TRUE)
 ```
 
@@ -398,10 +409,5 @@ randomForest::getTree(titanic_rf$finalModel, labelVar = TRUE)
 randomForest::varImpPlot(titanic_rf$finalModel)
 ```
 
-
-
-```{r, echo=TRUE, results="hold"}
-
-```
 
 

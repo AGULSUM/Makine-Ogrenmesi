@@ -46,7 +46,7 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ------------------------------------------------------------ tidyverse 1.2.1 --
+## -- Attaching packages ----------------------------------------------------------- tidyverse 1.2.1 --
 ```
 
 ```
@@ -57,7 +57,7 @@ library(tidyverse)
 ```
 
 ```
-## -- Conflicts --------------------------------------------------------------- tidyverse_conflicts() --
+## -- Conflicts -------------------------------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ## x dplyr::select() masks MASS::select()
@@ -77,7 +77,7 @@ head(Smarket)
 ## 6 2001  0.213  0.614 -0.623  1.032  0.959 1.3491  1.392        Up
 ```
 
-ISLR paketinde yer alan `Smarket` veri seti S&P500 endeksinin 2001-2005 dönemine ait 1250 günlük getirilerini içermektedir. `Today` sütunu bugünkü getiriyi göstermektedir. Bu değişkenin işareti, yani piyasanın yönü ise, `Direction` isimli sütundadır. `Direction` iki kategoriye sahiptir: Up (positif getiri) - Down (negatif getiri). Veri setinde ayrıca getirinin 5-günlük gecikmeli değerleri ve piyasa hacmini içeren `Volume` değişkeni yer almaktadır.  
+ISLR paketinde yer alan `Smarket` veri seti S&P500 endeksinin 2001-2005 dönemine ait 1250 günlük getirilerini içermektedir. `Today` sütunu bugünkü getiriyi göstermektedir. Bu değişkenin işareti, yani piyasanın yönü ise, `Direction` isimli sütundadır. `Direction` iki kategoriye sahiptir: Up (pozitif getiri) - Down (negatif getiri). Veri setinde ayrıca getirinin 5-günlük gecikmeli değerleri ve piyasa hacmini içeren `Volume` değişkeni yer almaktadır.  
 
 Günlük getiri grafiği: 
 
@@ -291,7 +291,7 @@ confusionMatrix(glm.pred, Smarket$Direction, positive = "Up")
 
 
 
-Daha önce belirttiğimiz gibi lojistk model 457+141 = 598 günü yanlış sınıflamıştır (**eğitim hata oranı** =  % 47.8). Daha gerçekçi bir hata oranı hesaplamak için verilerin tahminde kullanılmayan kısmında hatalı sınıflama oranını hesaplamak gerekir.  
+Daha önce belirttiğimiz gibi lojistik model 457+141 = 598 günü yanlış sınıflamıştır (**eğitim hata oranı** =  % 47.8). Daha gerçekçi bir hata oranı hesaplamak için verilerin tahminde kullanılmayan kısmında hatalı sınıflama oranını hesaplamak gerekir.  
 
 Bu amaçla, veri setinin 2001-2004 yıllarına ait kısmını eğitim veri seti, 2005 yılını ise test veri seti olarak ayıracağız. 
 
@@ -365,11 +365,12 @@ mean(glm.pred != Direction.2005)
 ## [1] 0.5198413
 ```
 
-Test hata oranı yaklaşık %52 olarak tahmi edildi. Açıktır ki bu tesadüfi tahminden daha kötüdür. Bu sonuçlara göre Etkin Piyasa Hipotezi geçerlidir diyebilir miyiz?
+Test hata oranı yaklaşık %52 olarak tahmin edildi. Açıktır ki bu tesadüfi tahminden daha kötüdür. Bu sonuçlara göre Etkin Piyasa Hipotezi geçerlidir diyebilir miyiz?
 
 <br/>
 <br/>
-Yukadıra tahmin ettiğimiz model tüm değişkenleri içeriyordu. Şimdi en yakın 2 gecikmeyi içeren daha küçük bir model tahmin edelim:  
+
+Yukarıda tahmin ettiğimiz model tüm değişkenleri içeriyordu. Şimdi en yakın 2 gecikmeyi içeren daha küçük bir model tahmin edelim:  
 
 ```r
 glm.fit <- glm(Direction ~ Lag1 + Lag2, data=Smarket, family=binomial, subset=train)
@@ -396,7 +397,9 @@ mean(glm.pred == Direction.2005)
 
 Gözlemlerin %56'sı doğru olarak sınıflandırıldı. Ufak bir artış görülse de her gün için artış öngören naif sınıflandırma da  %56 başarı oranına sahiptir. 
 
-Belirli değerler için öngörü hesaplamak için: 
+<br/>
+
+Belirli değerler için öngörü hesaplamak için örnek komut: 
 
 ```r
 predict(glm.fit, newdata = data.frame(Lag1=c(1.2,1.5),Lag2=c(1.1,-0.8)), type="response")
@@ -653,7 +656,7 @@ mean(knn.pred==Direction.2005)
 
 # Alıştırma: Default veri seti 
 
-Derst bazı kavramların açıklanmasında  `Default` veri setini kullandık. `Default` simülasyonla oluşturulmuş pedagojik amaçlı bir veri setidir. Kitaptaki adımları takip ederek  sonuçların replikasyonunu yapınız. Burada amaç bireylerin borç ödememe durumunun (default) (YES/NO) kestirilmesidir. Bu amaçla kullanılan modeller: lojistik regresyon, LDA, QDA, ve KNN (k=1,2,3 için). 
+Derste bazı kavramların açıklanmasında  `Default` veri setini kullandık. `Default` simülasyonla oluşturulmuş pedagojik amaçlı bir veri setidir. Kitaptaki adımları takip ederek  sonuçların replikasyonunu yapınız. Burada amaç bireylerin borç ödememe durumunun (default) (YES/NO) kestirilmesidir. Bu amaçla kullanılan modeller: lojistik regresyon, LDA, QDA, ve KNN (k=1,2,3 için). 
 
 
 ```r

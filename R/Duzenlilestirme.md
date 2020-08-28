@@ -96,8 +96,8 @@ grid <- 10^seq(10,-2,length=100)
 ridge.mod <- glmnet(x, y, alpha=0, lambda=grid)
 ```
 
-Ayarlama parametresi $\lambda$ $\lambda=10^{10}$ ile  
-$\lambda=10^{-2}$ arasında değerler almaktadır (isenirse default değerler de kullanılabilir). Bu grid değerleri tüm olanaklı modelleri kapsamaktadır. `glmnet()` değişkenleri otomatik olarak standardize eder. 
+Ayarlama parametresi $\lambda=10^{10}$ ile  
+$\lambda=10^{-2}$ arasında değerler almaktadır (istenirse `glmnet()`'in default değerleri de kullanılabilir). Bu grid değerleri tüm olanaklı modelleri kapsamaktadır. `glmnet()` değişkenleri otomatik olarak standardize eder. 
 
 Her bir $\lambda$ değeri için elimizde bir katsayı kümesi vardır: 
 
@@ -225,8 +225,8 @@ coefficients(lm(Balance ~ . -ID, data=Credit))
 ##         -8.5339006         16.8041792         10.1070252
 ```
 
-
-
+<br/>
+<br/>
 Şimdi verileri eğitim ve test olmak üzere ikiye ayıralım ve ridge regresyonunun test hatasını tahmin edelim.  
 
 ```r
@@ -758,7 +758,8 @@ mean((lasso.pred - y.test)^2)
 ## [1] 0.00817102
 ## [1] 0.9984801
 ```
-The variables x4-x10 are all zeros: 
+
+x4-x10 değişkenlerinin katsayılarının tümü sıfırdır: 
 
 ```r
 out <- glmnet(x,y,alpha=1)

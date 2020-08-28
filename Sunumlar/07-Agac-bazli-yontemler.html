@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Ağaç Bazlı Yöntemler</title>
     <meta charset="utf-8" />
@@ -12,10 +12,9 @@
 class: center, middle, inverse, title-slide
 
 # Ağaç Bazlı Yöntemler
-## (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES)
+## (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES-2020)
 ### Hüseyin Taştan
 ### Yıldız Teknik Üniversitesi
-### Ağustos 2020
 
 ---
 
@@ -42,7 +41,7 @@ background-size: cover
 
 
 
-## Konular
+## Plan
 
 - Karar ağaçları
 - Regresyon ağaçları 
@@ -60,7 +59,7 @@ background-size: cover
 * Daha sonra eğitim veri setinde bulunduğu alt bölgeye göre tahminler hesaplanır (ortalama ya da medyan kullanılabilir).
 * Alt bölgelerin ayrılmasında uygulanan kurallar bir karar ağacı ile temsil edilebilir.  
 * Ancak tek başına karar ağaçları kestirim açısından regresyon ve diğer sınıflandırma yöntemlerine göre daha başarısız. 
-* Çözüm: Gruplama teknikleri kullanmak. Çok sayıda ağaç tahmin edilip kestirimden önce bunların birleştirilmesi dayanan bu yöntemlere örnek olarak torbalama (bagging), rassal ormanlar (random forests), takviye (boosting) verilebilir.
+* Çözüm: Gruplama teknikleri kullanmak. Çok sayıda ağaç tahmin edilip kestirimden önce bunların birleştirilmesine dayanan bu yöntemlere örnek olarak torbalama (bagging), rassal ormanlar (random forests), takviye (boosting) verilebilir.
 
 ---
 # Değişken uzayının bölgelere ayrılması 
@@ -173,8 +172,9 @@ Bölgelerin şekli nasıl olacaktır? Tahmin edilen modelin yorum kolaylığı a
 .pull-right[
 * Beyzbol oyuncularının maaşlarını (Salary) kestirmek amacıyla iki değişkenden (Years, Hits) oluşan bir regresyon ağacı 
 * Salary değişkeninin doğal logaritması alındı. 
-* Modele göre tecrübesi (Years) 4.5 yıldan az olan bir sporcu için log(Salary) tahmini 5.11'dir. * Para birimi cinsinden: $1000\times e^{5.11}=165174\$$`
-* Ligde 4.5 yıldan fazladır oynayan ve 117.5'den daha az vuruş yapan bir sporcu için maaş tahmini: $1000\times e^{6}=402834\$$`
+* Modele göre tecrübesi (Years) 4.5 yıldan az olan bir sporcu için log(Salary) tahmini 5.11'dir. Para birimi cinsinden: `\(1000\times e^{5.11}=165174\)` `$`
+
+* Ligde 4.5 yıldan fazladır oynayan ve 117.5'den daha az vuruş yapan bir sporcu için maaş tahmini: `\(1000\times e^{6}=402834\)` `$`
 ]
 
 ---
@@ -212,13 +212,13 @@ Bölgelerin şekli nasıl olacaktır? Tahmin edilen modelin yorum kolaylığı a
 # Ağacın Budanması 
 
 * Bir regresyon ağacı eğitim setinde iyi bir uyum sergilese de test verilerinde başarılı kestirimler vermez. 
-* Bunun nedeni aşırı uyumdur (overfitting). Ortaya çıkan ağaç çok büyük olma eğilimndedir. 
+* Bunun nedeni aşırı uyumdur (overfitting). Ortaya çıkan ağaç çok büyük olma eğilimindedir. 
 * Çözüm: gereksiz dalları (branches) budayarak daha küçük ve daha başarılı kestirim performansına sahip ağaç oluşturmak
 * Daha küçük ağaç daha az terminal düğüm noktalarına (yapraklara) sahiptir. 
 * Küçük ağaçlar az miktarda sapma içerse de varyansları çok daha düşüktür. 
 * Ağacın budanması: 
   1. Büyük bir ağaç ile başla 
-  1. Daha sonra çapraz geçerleme ile en başarılı test performansına sahip alt ağacı çe. 
+  1. Daha sonra çapraz geçerleme ile en başarılı test performansına sahip alt ağacı seç. 
 * Ancak olanaklı alt ağaçların sayısı çok fazla olduğundan bu yol takip edilmez.
 
 ---
@@ -228,8 +228,12 @@ Bölgelerin şekli nasıl olacaktır? Tahmin edilen modelin yorum kolaylığı a
 `$$\sum_{m=1}^{|T|} \sum_{i: x_{i} \in R_{m}}\left(y_{i}-\hat{y}_{R_{m}}\right)^{2}+\alpha|T|$$`
 `\(\alpha\)`=ayarlama parametresi, `\(|T|\)` terminal düğüm sayısı 
 
-* `\(\alpha\)` parametresi modelin (ağacın) karmaşıklığı ile model uyumu arasındaki ödünümü yakalar. * `\(\alpha=0\)` ise `\(T\)` alt ağacı başlangıçtaki karmaşık ağaca `\(T_0\)` eşit olur. 
+* `\(\alpha\)` parametresi modelin (ağacın) karmaşıklığı ile model uyumu arasındaki ödünümü yakalar. 
+
+* `\(\alpha=0\)` ise `\(T\)` alt ağacı başlangıçtaki karmaşık ağaca `\(T_0\)` eşit olur. 
+
 * `\(\alpha\)` büyüdükçe ağaç küçülür (son düğüm noktalarının sayısı azalır). 
+
 * `\(\alpha\)` ayarlama parametresi çapraz geçerleme ile seçilebilir. 
 
 ---
@@ -254,7 +258,7 @@ background-color: #FFFFFF
 ]
 
 .pull-right[
-* Farklı ağaç büyüklükleri için ($\alpha$) ortalama hata karesi (MSE)
+* Farklı ağaç büyüklükleri için ( `\(\alpha\)` ) ortalama hata karesi (MSE)
 * En düşük çapraz geçerleme MSE değerini veren ağaç büyüklüğü 3 olarak bulunmuştur. (önceki örneğe bakınız) 
 * Ağaç büyüdükçe eğitim (training) hatası azalmaya devam ediyor. 
 ]
@@ -356,7 +360,7 @@ title: blank
 --
 .pull-right[
 ## Zayıf yanları 
-* Diğer regresyon ve sınıflandırma ağaçlarına göre kestirim performansı daha kötüdür. 
+* Diğer regresyon ve sınıflandırma yöntemlerine göre kestirim performansı daha kötüdür. 
 * Verilerde ufak bir değişiklik ağaçlarda önemli değişikliklere yol açabilir.
 * Örneğin eğitim verilerini rassal olarak ikiye bölüp ayrı ayrı ağaç tahmini yapsak çok farklı sonuçlar elde edebilirz (**yüksek varyans**).  
 ]
@@ -422,7 +426,7 @@ Tek karar ağacı tahmin etmek yerine çok sayıda ağaç oluşturup bunların b
 * Bagging yönteminde her adımda ayrı bir ağaç tahmin ediliyordu. Gözlemler farklılaşsa da aynı değişken seti kullanılıyordu. 
 * Bu süreçte ağaçlar birbirine benzer olma eğilimindedir. Yani ağaçlar arasında korelasyon yüksektir. Bu da ortalamanın varyansını arttırır. 
 * Rassal Ormanlar (Random Forests) benzer adımları takip eder. Ancak, korelasyonu azaltmak ve varyansı düşürmek (*decorrelating*) için ağaçlar oluşturulurken dal ayrımlarında tüm `\(p\)` değişkenleri değil de bunların `\(m\)` gibi bir rassal alt kümesi göz önüne alınır. 
-* Her hangi bir ağaçta yeni bir ayırım yapılırken gözönüne alınacak `\(m\approx \sqrt{p}\)` tane `\(X\)` değişkeni rassal olarak belirlenir. Örneğin bir ağaçta `\(X_1,X_3,X_5\)` kullanılırken başka bir ağaçta `\(X_2,X_4\)` kullanılabilir ($p=5$ için). 
+* Her hangi bir ağaçta yeni bir ayırım yapılırken gözönüne alınacak `\(m\approx \sqrt{p}\)` tane `\(X\)` değişkeni rassal olarak belirlenir. Örneğin bir ağaçta `\(X_1,X_3,X_5\)` kullanılırken başka bir ağaçta `\(X_2,X_4\)` kullanılabilir ( `\(p=5\)` için). 
 * Bagging Rassal Ormanlar'ın özel bir halidir. `\(m=p\)` alındığında bagging elde edilir.
 
 ---

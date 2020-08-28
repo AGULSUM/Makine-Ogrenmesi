@@ -1594,12 +1594,12 @@ code.r{
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(MASS)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(ISLR)</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
-<pre><code>## -- Attaching packages ------------------------------------------------------------ tidyverse 1.2.1 --</code></pre>
+<pre><code>## -- Attaching packages ----------------------------------------------------------- tidyverse 1.2.1 --</code></pre>
 <pre><code>## v ggplot2 3.2.1     v purrr   0.3.3
 ## v tibble  2.1.3     v dplyr   0.8.3
 ## v tidyr   1.0.0     v stringr 1.4.0
 ## v readr   1.3.1     v forcats 0.4.0</code></pre>
-<pre><code>## -- Conflicts --------------------------------------------------------------- tidyverse_conflicts() --
+<pre><code>## -- Conflicts -------------------------------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ## x dplyr::select() masks MASS::select()</code></pre>
@@ -1611,7 +1611,7 @@ code.r{
 ## 4 2001 -0.623  1.032  0.959  0.381 -0.192 1.2760  0.614        Up
 ## 5 2001  0.614 -0.623  1.032  0.959  0.381 1.2057  0.213        Up
 ## 6 2001  0.213  0.614 -0.623  1.032  0.959 1.3491  1.392        Up</code></pre>
-<p>ISLR paketinde yer alan <code>Smarket</code> veri seti S&amp;P500 endeksinin 2001-2005 dönemine ait 1250 günlük getirilerini içermektedir. <code>Today</code> sütunu bugünkü getiriyi göstermektedir. Bu değişkenin işareti, yani piyasanın yönü ise, <code>Direction</code> isimli sütundadır. <code>Direction</code> iki kategoriye sahiptir: Up (positif getiri) - Down (negatif getiri). Veri setinde ayrıca getirinin 5-günlük gecikmeli değerleri ve piyasa hacmini içeren <code>Volume</code> değişkeni yer almaktadır.</p>
+<p>ISLR paketinde yer alan <code>Smarket</code> veri seti S&amp;P500 endeksinin 2001-2005 dönemine ait 1250 günlük getirilerini içermektedir. <code>Today</code> sütunu bugünkü getiriyi göstermektedir. Bu değişkenin işareti, yani piyasanın yönü ise, <code>Direction</code> isimli sütundadır. <code>Direction</code> iki kategoriye sahiptir: Up (pozitif getiri) - Down (negatif getiri). Veri setinde ayrıca getirinin 5-günlük gecikmeli değerleri ve piyasa hacmini içeren <code>Volume</code> değişkeni yer almaktadır.</p>
 <p>Günlük getiri grafiği:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>Smarket <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">day=</span><span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(Smarket)) <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -1736,7 +1736,7 @@ code.r{
 ##        &#39;Positive&#39; Class : Up              
 ## </code></pre>
 <p><code>confusionMatrix()</code> fonksiyonu hata matrisinin yanı sıra çok sayıda istatistik hesaplamaktadır. Ayrıca duyarlılık (sensitivity) ve belirlilik (specificity) gibi çeşitli ölçüleri de raporlamaktadır. Piyasa yön sınıflamasınnda duyarlılık gerçek yukarı yönlü (Up) sınıflandırılan hareketlerin oranıdır, yani 507/(141+507)= 0.7824, %78.24. Belirlilik ise aşağı yönlü hareketler içinde doğru sınıflananların oranıdır: 145/(145+457)= 0.2409, %24.09.</p>
-<p>Daha önce belirttiğimiz gibi lojistk model 457+141 = 598 günü yanlış sınıflamıştır (<strong>eğitim hata oranı</strong> = % 47.8). Daha gerçekçi bir hata oranı hesaplamak için verilerin tahminde kullanılmayan kısmında hatalı sınıflama oranını hesaplamak gerekir.</p>
+<p>Daha önce belirttiğimiz gibi lojistik model 457+141 = 598 günü yanlış sınıflamıştır (<strong>eğitim hata oranı</strong> = % 47.8). Daha gerçekçi bir hata oranı hesaplamak için verilerin tahminde kullanılmayan kısmında hatalı sınıflama oranını hesaplamak gerekir.</p>
 <p>Bu amaçla, veri setinin 2001-2004 yıllarına ait kısmını eğitim veri seti, 2005 yılını ise test veri seti olarak ayıracağız.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># Eğitim veri seti indikatörü yarat</span></span>
 <span id="cb30-2"><a href="#cb30-2"></a>train &lt;-<span class="st"> </span>(Smarket<span class="op">$</span>Year<span class="op">&lt;</span><span class="dv">2005</span>)</span>
@@ -1770,8 +1770,9 @@ code.r{
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="co"># % incorrect -- error rate</span></span>
 <span id="cb39-2"><a href="#cb39-2"></a><span class="kw">mean</span>(glm.pred <span class="op">!=</span><span class="st"> </span>Direction<span class="fl">.2005</span>)</span></code></pre></div>
 <pre><code>## [1] 0.5198413</code></pre>
-<p>Test hata oranı yaklaşık %52 olarak tahmi edildi. Açıktır ki bu tesadüfi tahminden daha kötüdür. Bu sonuçlara göre Etkin Piyasa Hipotezi geçerlidir diyebilir miyiz?</p>
-<p><br /> <br /> Yukadıra tahmin ettiğimiz model tüm değişkenleri içeriyordu. Şimdi en yakın 2 gecikmeyi içeren daha küçük bir model tahmin edelim:</p>
+<p>Test hata oranı yaklaşık %52 olarak tahmin edildi. Açıktır ki bu tesadüfi tahminden daha kötüdür. Bu sonuçlara göre Etkin Piyasa Hipotezi geçerlidir diyebilir miyiz?</p>
+<p><br /> <br /></p>
+<p>Yukarıda tahmin ettiğimiz model tüm değişkenleri içeriyordu. Şimdi en yakın 2 gecikmeyi içeren daha küçük bir model tahmin edelim:</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>glm.fit &lt;-<span class="st"> </span><span class="kw">glm</span>(Direction <span class="op">~</span><span class="st"> </span>Lag1 <span class="op">+</span><span class="st"> </span>Lag2, <span class="dt">data=</span>Smarket, <span class="dt">family=</span>binomial, <span class="dt">subset=</span>train)</span>
 <span id="cb41-2"><a href="#cb41-2"></a>glm.probs &lt;-<span class="st"> </span><span class="kw">predict</span>(glm.fit, Smarket<span class="fl">.2005</span>, <span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</span>
 <span id="cb41-3"><a href="#cb41-3"></a>glm.pred &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="st">&quot;Down&quot;</span>,<span class="dv">252</span>)</span>
@@ -1784,7 +1785,8 @@ code.r{
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="kw">mean</span>(glm.pred <span class="op">==</span><span class="st"> </span>Direction<span class="fl">.2005</span>) </span></code></pre></div>
 <pre><code>## [1] 0.5595238</code></pre>
 <p>Gözlemlerin %56’sı doğru olarak sınıflandırıldı. Ufak bir artış görülse de her gün için artış öngören naif sınıflandırma da %56 başarı oranına sahiptir.</p>
-<p>Belirli değerler için öngörü hesaplamak için:</p>
+<p><br /></p>
+<p>Belirli değerler için öngörü hesaplamak için örnek komut:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="kw">predict</span>(glm.fit, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">Lag1=</span><span class="kw">c</span>(<span class="fl">1.2</span>,<span class="fl">1.5</span>),<span class="dt">Lag2=</span><span class="kw">c</span>(<span class="fl">1.1</span>,<span class="op">-</span><span class="fl">0.8</span>)), <span class="dt">type=</span><span class="st">&quot;response&quot;</span>)</span></code></pre></div>
 <pre><code>##         1         2 
 ## 0.4791462 0.4960939</code></pre>
@@ -1918,7 +1920,7 @@ code.r{
 </div>
 <div id="alistirma-default-veri-seti" class="section level1">
 <h1><span class="header-section-number">5</span> Alıştırma: Default veri seti</h1>
-<p>Derst bazı kavramların açıklanmasında <code>Default</code> veri setini kullandık. <code>Default</code> simülasyonla oluşturulmuş pedagojik amaçlı bir veri setidir. Kitaptaki adımları takip ederek sonuçların replikasyonunu yapınız. Burada amaç bireylerin borç ödememe durumunun (default) (YES/NO) kestirilmesidir. Bu amaçla kullanılan modeller: lojistik regresyon, LDA, QDA, ve KNN (k=1,2,3 için).</p>
+<p>Derste bazı kavramların açıklanmasında <code>Default</code> veri setini kullandık. <code>Default</code> simülasyonla oluşturulmuş pedagojik amaçlı bir veri setidir. Kitaptaki adımları takip ederek sonuçların replikasyonunu yapınız. Burada amaç bireylerin borç ödememe durumunun (default) (YES/NO) kestirilmesidir. Bu amaçla kullanılan modeller: lojistik regresyon, LDA, QDA, ve KNN (k=1,2,3 için).</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a><span class="kw">library</span>(ISLR)</span>
 <span id="cb77-2"><a href="#cb77-2"></a><span class="kw">data</span>(Default)</span>
 <span id="cb77-3"><a href="#cb77-3"></a><span class="kw">contrasts</span>(Default<span class="op">$</span>default)</span></code></pre></div>

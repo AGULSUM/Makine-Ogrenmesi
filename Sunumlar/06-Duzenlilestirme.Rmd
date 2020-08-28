@@ -1,7 +1,7 @@
 ---
 title: "Düzenlileştirme"
 author: "Hüseyin Taştan"
-date: "Ağustos 2020"
+# date: "Ağustos 2020"
 output:
   xaringan::moon_reader:
     css: [default, metropolis]
@@ -15,7 +15,7 @@ output:
   html_document:
     df_print: paged
   pdf_document: default
-subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES)
+subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES-2020)
 institute: Yıldız Teknik Üniversitesi
 ---
 class: my-medium-font
@@ -38,11 +38,14 @@ class: my-medium-font
 
 
 
-# Konular
+# Plan
 
 - Düzenlileştirme (Regularization)
+
 - Çıkıntı regresyonu (Ridge regression)
+
 - LASSO 
+
 - Elastik Net
 
 ---
@@ -56,10 +59,13 @@ class: my-medium-font
 
 ---
 # Tam Uyum: Basit Regresyon 
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+```
+
 .pull-left[
 $n=21$, $p=1$, $R^2=0.94$
 ```{r, warning=FALSE, echo=FALSE} 
-library(tidyverse)
 set.seed(123)
 n <- 21 
 x <- rnorm(n, mean=10, sd=2) 
@@ -89,7 +95,7 @@ reg2 <- lm(y ~ x, data=df2)
 ]
 
 ---
-# Çıkıntı Regresyonu 
+# Çıkıntı (Ridge) Regresyonu 
 
 OLS amaç fonksiyonu 
 $$SSR = \sum_{i=1}^n (y_i -  \beta_0 - \beta_1 x_{i1}-\ldots-\beta_p x_{ip})^2$$

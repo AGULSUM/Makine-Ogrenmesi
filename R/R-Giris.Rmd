@@ -1,6 +1,7 @@
 ---
 title: "R: Giriş"
-author: "Prof. Dr. Hüseyin Taştan" 
+author: "Prof. Dr. Hüseyin Taştan"
+date: "Ağustos 2020"
 output:
   html_document: 
     number_sections: true
@@ -105,7 +106,7 @@ print(a)
 print(a, digits = 17)
 ```
 
-81 olarak bulduğumuz sonuç tam olarak 81 değil. Ama nasıl olur? Bilgisayar neden bize tam sonuç vermiyor? Bunun nedeni 81 sayısının (aslında tüm sayıların) ikili sistem kullanan bilgisayarlarda tam olarak temsil edilememesidir.  81'in temmsilindeki hata: 
+81 olarak bulduğumuz sonuç tam olarak 81 değil. Ama nasıl olur? Bilgisayar neden bize tam sonuç vermiyor? Bunun nedeni 81 sayısının (aslında tüm sayıların) ikili sistem kullanan bilgisayarlarda tam olarak temsil edilememesidir.  81'in temsilindeki hata: 
 ```{r, echo=TRUE}
 print(81-a, digits = 17)
 ```
@@ -114,7 +115,7 @@ Hata = $1.4210854715202004\times 10^{-14}$,  ya da
 format(81-a, scientific = FALSE)
 ```
 
-Bu yaptığınız hesaplamanın amacına bağlı olarak sorun yaratabilir. Örneğin yazdığınız programda bir aritmetik işlemin sonucunu başka bir sonuçla karşılaştırmak istediğinizi düşünelim. Bunun için mantıksal işlemcileri kullanabilirsiniz. Örneğin
+Bu, yaptığınız hesaplamanın amacına bağlı olarak sorun yaratabilir. Örneğin yazdığınız programda bir aritmetik işlemin sonucunu başka bir sonuçla karşılaştırmak istediğinizi düşünelim. Bunun için mantıksal işlemcileri kullanabilirsiniz. Örneğin
 ```{r, echo=TRUE}
 81 == a
 ```
@@ -124,7 +125,7 @@ Bildiğimiz tam sonuç (81) ile aritmetik işlemin sonucu (a) eşit değil. Asl�
 all.equal(81,a)
 ```
 
-Burada default tolerans düzeyi $0.000000015$ kullanıldı. Yani aritmetik çözüm ile tam sonuç arasındaki fark tolerans düzeyinden küçüktür. R'da machine precision $\epsilon$) 
+Burada default tolerans düzeyi $0.000000015$ kullanıldı. Yani aritmetik çözüm ile tam sonuç arasındaki fark tolerans düzeyinden küçüktür. R'da machine precision ($\epsilon$) 
 ```{r, echo=TRUE}
 print(.Machine$double.eps, digits=22)
 ```
@@ -137,6 +138,8 @@ print(u, digits=22)
 u<1
 ```
 
+<br/>
+<br/>
 
 Diğer aritmetik işlemler de sorun yaratabilir. Örneğin 10.2'den 10.1'i çıkaralım: 
 ```{r, echo=TRUE}
@@ -196,7 +199,7 @@ Hafızadaki tüm nesneleri görmek için
 ls()
 ```
 
-`RStudio`'da sağ üst pencered `Environment` altında tüm nesneler görülebilir. 
+`RStudio`'da sağ üst pencerede `Environment` altında tüm nesneler görülebilir. 
 
 `rm(x)` komutu `x` nesnesini hafızadan siler. Tüm nesneleri silmek istersek
 ```{r, echo=TRUE}
@@ -282,7 +285,7 @@ score[n-3:n]
 
 **Alıştırma** `score` vektöründe kayıp değerleri `NA` bulunuz ve yeni bir vektör yaratarak bu değerleri siliniz. 
 
-**Çösül** Bunun en basit yolu temel R'da yer alan `which()` ve `is.na()` fonksiyonlarını kullanmaktır. `is.na()` fonksiyonu `NA` elemanlar için mantıksal değer `TRUE` olmayanlar için `FALSE` değerini içeren bir mantıksal vektör oluşturur.  
+**Çözüm** Bunun en basit yolu temel R'da yer alan `which()` ve `is.na()` fonksiyonlarını kullanmaktır. `is.na()` fonksiyonu `NA` elemanlar için mantıksal değer `TRUE` olmayanlar için `FALSE` değerini içeren bir mantıksal vektör oluşturur.  
 ```{r}
 # is an element NA ?
 is.na(score)

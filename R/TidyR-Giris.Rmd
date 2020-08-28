@@ -53,6 +53,9 @@ library(tidyverse)
 
 * `forcats`, faktör değişkenlerinin işlenmesi
 
+<br/>
+<br/>
+
 **tidy** veri seti nedir? Bir tidy (düzenli) veri seti standart dikdörtgensel yapıya sahiptir. Sütunlar değişkenleri, satırlar ise gözlemleri gösterir. Her veri seti tidy formatta olmayabilir. Veri analizinden önce tidy hale getirilmesi gerekebilir. 
 
 ![Düzenli (tidy) bir veri setinin yapısı (kaynak: [R for Data Science]<https://r4ds.had.co.nz/tidy-data.html>)](img/tidy.png) 
@@ -101,11 +104,11 @@ df[[1]]
 
 ## `filter()` 
 
-İsminden de anlaşılacağı gibi `filter()` fonksiyonu ile belirli özelliklere sahip gözlemleri (satırları) seçebilir ve tablo ya da yeni bir ver seti (tibble, data frame) oluşturabiliriz. 
+İsminden de anlaşılacağı gibi `filter()` fonksiyonu ile belirli özelliklere sahip gözlemleri (satırları) seçebilir ve tablo ya da yeni bir veri seti (tibble, data frame) oluşturabiliriz. 
 
 ![](img/filter.png)
 
-Örnek olarak `gapminder` veri setinde Türkiye'nin gözlemlerini almak istediğimizi düşünelim. Veri setini incelediğimiz Türkiye'nin 1573 ile 1584 satırları arasında yer aldığını görüyoruz. Bu bilgiden hareketl Türkiye veri setini aşağıdaki gibi oluşturabiliriz: 
+Örnek olarak `gapminder` veri setinde Türkiye'nin gözlemlerini almak istediğimizi düşünelim. Veri setini incelediğimizde Türkiye'nin 1573 ile 1584 satırları arasında yer aldığını görüyoruz. Bu bilgiden hareketle Türkiye veri setini aşağıdaki gibi oluşturabiliriz: 
 ```{r, echo=TRUE, results="hold"}
 (turkey <- gapminder[1573:1584,])
 ```
@@ -452,7 +455,7 @@ trdata1_tidy
 
 # `ggplot2` ile verilerin görselleştirilmesi
 
-`ggplot2` verilerin görselleştirilmesinde **grafiklerin grameri** (grammar of graphics) yaklaşımını uygulayan Hadley Wickham tarafından geliştirilmiş bir R paketidir. `ggplot2` hakkında daha fazla kaynak için bkz. 
+`ggplot2` verilerin görselleştirilmesinde **grafiklerin grameri** (grammar of graphics) yaklaşımını uygulayan, Hadley Wickham tarafından geliştirilmiş bir R paketidir. `ggplot2` hakkında daha fazla kaynak için bkz. 
 
 * [Hadley Wickham ve Garret Grolemund, R for Data Science, Data Visualization with ggplot2](https://r4ds.had.co.nz/data-visualisation.html)
 

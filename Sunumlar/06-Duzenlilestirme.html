@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Düzenlileştirme</title>
     <meta charset="utf-8" />
@@ -12,10 +12,9 @@
 class: center, middle, inverse, title-slide
 
 # Düzenlileştirme
-## (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES)
+## (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES-2020)
 ### Hüseyin Taştan
 ### Yıldız Teknik Üniversitesi
-### Ağustos 2020
 
 ---
 
@@ -39,11 +38,14 @@ class: my-medium-font
 
 
 
-# Konular
+# Plan
 
 - Düzenlileştirme (Regularization)
+
 - Çıkıntı regresyonu (Ridge regression)
+
 - LASSO 
+
 - Elastik Net
 
 ---
@@ -57,18 +59,20 @@ class: my-medium-font
 
 ---
 # Tam Uyum: Basit Regresyon 
+
+
 .pull-left[
 `\(n=21\)`, `\(p=1\)`, `\(R^2=0.94\)`
-![](06-Duzenlilestirme_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+![](06-Duzenlilestirme_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
 `\(n=2\)`, `\(p=1\)`, `\(R^2=1\)`
-![](06-Duzenlilestirme_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](06-Duzenlilestirme_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 ]
 
 ---
-# Çıkıntı Regresyonu 
+# Çıkıntı (Ridge) Regresyonu 
 
 OLS amaç fonksiyonu 
 `$$SSR = \sum_{i=1}^n (y_i -  \beta_0 - \beta_1 x_{i1}-\ldots-\beta_p x_{ip})^2$$`

@@ -1,7 +1,7 @@
 ---
 title: "Sınıflandırma Problemleri"
 author: "Hüseyin Taştan"
-date: "Ağustos 2020"
+# date: "Ağustos 2020"
 output:
   xaringan::moon_reader:
     css: [default, metropolis]
@@ -15,8 +15,8 @@ output:
   html_document:
     df_print: paged
   pdf_document: default
-subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-EYS)
-institute: Yıldız Technical University
+subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES-2020)
+institute: Yıldız Teknik Üniversitesi
 ---
 class: my-medium-font
 
@@ -38,7 +38,7 @@ class: my-medium-font
 
 
 
-# Konular
+# Plan
 
 - Sınıflandırma problemleri 
 
@@ -49,6 +49,7 @@ class: my-medium-font
 - Karesel Diskriminant Analizi (QDA)
 
 - Sınıflandırma performansının ölçümü 
+
 - ROC eğrisi ve AUC
 
 ---
@@ -93,7 +94,7 @@ Burada default ikili (0/1) değerler almaktadır.
 
 * Doğrudan tepki değişkenini modellemek yerine sınıflandırma olasılığını modelleyebiliriz. 
 $$p(X) = \beta_0 + \beta_1 X$$
-Burada $p(X)=PR(Y=1|X)$ tepki değişkeninin grup=1 olarak sınıflandırma (koşullu) olasılığıdır. 
+Burada $p(X)=Pr(Y=1|X)$ tepki değişkeninin grup=1 olarak sınıflandırılma (koşullu) olasılığıdır. 
 
 * Tanım gereği $0\leq p(X)\leq 1$. Örneğin, lojistik fonksiyon
 $$p(X)=\frac{e^{\beta_{0}+\beta_{1} X}}{1+e^{\beta_{0}+\beta_{1} X}}$$
@@ -187,7 +188,7 @@ Farklı varyanslar, ortalama aynı
 ---
 # LDA, p=1 için koşullu olasılıklar 
 
-* Tek kestirim değişkeni $p=1$ için normal dağılım ve her grup için aynı varyans ($\sigma^2$) varsayımları altında koşullu olasılıklar 
+* Tek kestirim değişkeni $p=1$ için normal dağılım ve her grup için aynı varyans ( $\sigma^2$ ) varsayımları altında koşullu olasılıklar 
 $$p_{k}(x)=\frac{\pi_{k} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{1}{2 \sigma^{2}}\left(x-\mu_{k}\right)^{2}\right)}{\sum_{l=1}^{K} \pi_{l} \frac{1}{\sqrt{2 \pi} \sigma} \exp \left(-\frac{1}{2 \sigma^{2}}\left(x-\mu_{l}\right)^{2}\right)}$$
 
 * Bayes sınıflandırıcısı verilmiş bir $X=x$ gözlemini $p_k(x)$'in en yüksek olduğu gruba atar. 
@@ -333,7 +334,8 @@ Hata Matrisi (Confusion Matrix)
 
 
 * Özgüllük (specificity): $(1-23/9667)\times 100$ = % 99.8
-* Genel hata oranı düşük olsa da Default (YES) grubu içindeki hata oranı çok yüksek. * Doğru pozitif oranı ya da duyarlılık (sensitivity) % 24.3 $(=100\times 81/333)$ 
+* Genel hata oranı düşük olsa da Default (YES) grubu içindeki hata oranı çok yüksek. 
+* Doğru pozitif oranı ya da duyarlılık (sensitivity) % 24.3 $(=100\times 81/333)$ 
 * Yanlış negatif oranı $=\%75.7=100\times 252/333=1-duyarlılık$. Yüksek risk grubundaki bireyleri tahmin etmek isteyen bir banka için bu oldukça yüksek. 
 * Yukarıdaki sınıflamada 0.5 eşik değerini kullandık. Yani koşullu olasılık 0.5'den büyükse default = YES grubuna atandı. 
 

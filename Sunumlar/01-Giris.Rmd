@@ -1,6 +1,7 @@
 ---
 title: "Giriş"
-author: "Hüseyin Taştan" 
+author: "Hüseyin Taştan"
+#date: "Ağustos 2020"
 output:
   xaringan::moon_reader:
     css: [default, metropolis]
@@ -14,31 +15,68 @@ output:
   html_document:
     df_print: paged
   pdf_document: default
-subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-EYS)
-institute: Yıldız Technical University
+subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES 2020)
+institute: Yıldız Teknik Üniversitesi
+
 ---
+class: my-medium-font
+
 <style type="text/css">
 .remark-slide-content {
     font-size: 25px;
     padding: 1em 4em 1em 4em;
 }
-.my-one-page-font {
+.my-large-font {
   font-size: 40px;
 }
 .my-small-font {
   font-size: 20px;
 }
+.my-medium-font {
+  font-size: 30px;
+}
 </style>
 
 
 
-# Konular
 
-- Makine Öğrenmesi Nedir? 
+# Plan
+
+- Dersin tanıtımı
+- Öğrenme ve makine öğrenmesi
 - Yapay Zeka, Veri Bilimi, Veri Madenciliği
 - Gözetimli ve gözetimsiz öğrenme, pekiştirmeli öğrenme 
 - Ekonometri ve makine öğrenmesi: farklar ve benzerlikler 
 - Kestirim politikası problemleri 
+
+---
+
+# Dersin tanıtımı 
+
+* Türkiye Ekonomi Kurumu 2020 online yaz seminerlerinin bir parçası olarak tasarlanan bu derste temel makine öğrenmesi algoritmalarının giriş düzeyinde incelenmesi amaçlanmaktadır. Ders ağırlıklı olarak gözetimli öğrenme algoritmalarını kapsamaktadır.   
+
+* Ders kitabı: James, Gareth, D. Witten, T. Hastie, R. Tibshirani (2017), An Introduction to Statistical Learning with Applications in R, Springer. Kitabın elektronik versiyonuna aşağıdaki linklerden ulaşabilirsiniz: [http://faculty.marshall.usc.edu/gareth-james/ISL/](http://faculty.marshall.usc.edu/gareth-james/ISL/)
+
+* Ders malzemeleri için link: [https://github.com/htastan/Makine-Ogrenmesi](https://github.com/htastan/Makine-Ogrenmesi)
+
+* Uygulamalar R programında yapılacaktır. 
+
+
+---
+# Günlük ders programı 
+
+1. gün: Giriş, Temel Kavrammlar, R'a Giriş, R ile Tidy veri analizi
+
+2. gün: Gözetimli öğrenme, Regresyon problemleri, R uygulamaları
+
+3. gün: Sınıflandırma problemleri, R uygulamaları 
+
+4. gün: Geçerleme (Validation) ve Çapraz geçerleme (Cross validation) yaklaşımı; Düzenlileştirme (Regularization)
+
+5. gün: Ağaç bazlı yöntemler (regresyon ve sınıflandırma ağaçları, bagging, rassal ormanlar, boosting)
+
+6. gün: Gözetimsiz öğrenme yöntemleri: Boyut küçültme (temel bileşenler analizi (PCA)), kümeleme (K-ortalamalar ve hiyerarşik kümeleme)
+
 
 ---
 # Öğrenme Nedir?
@@ -156,7 +194,7 @@ Bu problemde:
 
 ---
 class: clear
-background-image: url("img/MLpic.png")
+background-image: url("img/MLpic3.png")
 background-size: cover
 
 ---
@@ -200,7 +238,15 @@ Detaylar için bkz. Alpaydın (2018, s. 10 ve s. 383)
 ---
 # Derin Öğrenme (Deep Learning)
 
+* Derin öğrenme  beynin işleyiş yapısından hareketle geliştirilmiş yapay sinir ağları (artificial neural network - ANN) ve benzeri algoritmaları kapsayan bir makine öğrenmesi çalışma alanıdır. 
 
+* Yapay sinir ağları tıpkı beyinde olduğu gibi nöronlardan ve bunların bağlantılarından oluşur. 
+
+* Tipik bir yapay sinir ağı problemi giriş katmanı, ara katmanlar, ve çıkış katmanından oluşur. Kaç katman olacağı ve bu katmanların birbirine nasıl bağlanacağı gibi çok sayıda kararın verilmesi gerekir. 
+
+* Kullanım alanları: görüntü tanıma, doğal dil işleme, konuşma tanıma, vb. büyük veri kümelerinin olduğu problemler. 
+
+.center[![:scale 50%](img/ann1.PNG)]
 
 ---
 # Ekonometri ve Makine Öğrenmesi 
@@ -237,7 +283,7 @@ Modelde sabit terim dahil olmak üzere $p+1$ bilinmeyen $\beta$ parametresi vard
 
 * Modelin tahmini: Sıradan En Küçük Kareler (Ordinary Least Squares - OLS) Gauss-Markov varsayımları altında BLUE özelliklerini sağlar.
 
-* Pratikte Çok üzerinde durulmayan bir nokta: gözlem sayısı, $n$, $\mathbf{X}$ değişken sayısından ($p$) çok daha fazla olmalıdır. Yani, $n>>p$ olmalıdır. 
+* Pratikte Çok üzerinde durulmayan bir nokta: gözlem sayısı, $n$, $\mathbf{X}$ değişken sayısından ( $p$ ) çok daha büyük olmalıdır: $n>>p$ 
 
 * OLS yöntemi $p>n$ durumunda çalışmaz. 
 
@@ -268,7 +314,7 @@ Modelde sabit terim dahil olmak üzere $p+1$ bilinmeyen $\beta$ parametresi vard
 
 * Ancak bazı politika problemlerinde nedensel çıkarımlar gerekmeyebilir (Kleinberg et al. 2015).
 
-* Bu politika problemleri dikkatlice hazırlanmış yapısal belirlenme şartlarını ve genellikle ciddi varsayımlara yaslanan karşıolgusal analizleri yerine sadece başarılı kestirim modellerini gerektirir. 
+* Bu politika problemleri dikkatlice hazırlanmış yapısal belirlenme şartlarını ve genellikle ciddi varsayımlara yaslanan karşıolgusal analizler yerine sadece başarılı kestirim modellerini gerektirir. 
 
 * Başarılı kestirim modellerinin oluşturulmasında makine öğrenmesi yaklaşımları yararlı olabilir.
 

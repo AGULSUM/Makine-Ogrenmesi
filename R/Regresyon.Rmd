@@ -53,7 +53,7 @@ names(Boston)
 # ?Boston
 ```
 
-Run the regression of medv (median house value in \$1000) on lower income status
+<br>
 
 Medyan ev fiyatlarının (medv, 1000\$) düşük gelir (lstat) üzerine basit regresyonunu kuralım: 
 ```{r}
@@ -83,11 +83,13 @@ ya da
 reg1$coefficients
 ```
 
+<br>
+
 Denklem formunda yazalım: 
 $$\widehat{medv} = 34.55 - 0.950~lstat$$
 
 
-Regresyon çıktısını tablolaştırmak için çok sayıda başka araçlar geliştirilmiştir. Dilerseniz `broom` paketinde yer alan `tidy()`, `glance()` ve `augment()` fonksiyonlarını kullanabilirsiniz:  
+Regresyon sonuçlarını tablolaştırmak için çok sayıda araç geliştirilmiştir. Örneğin, `broom` paketinde yer alan `tidy()`, `glance()` ve `augment()` fonksiyonlarını kullanabilirsiniz:  
 ```{r, warning=FALSE}
 library(broom)
 tidy(reg1)
@@ -103,9 +105,9 @@ augment(reg1)
 
 
 
-  
+<br>  
 
-Regresyon katsayıları için %95 güven aralığı
+Regresyon katsayıları için %95 güven aralığı: 
 ```{r}
 # 95% confidence interval 
 confint(reg1)
@@ -125,9 +127,9 @@ Bir gözlem için kestirimler:
 predict(reg1, data.frame(lstat=(c(5,10,15))), interval="prediction")
 ```
 
-Dikkat edilirse kestirimler hem ortalama için hem de tek bir gözlem için aynı. Ancık Tekil gözlem kestirimlerinin standart hatası daha büyük olduğundan güven aralığı daha geniştir. 
+Dikkat edilirse kestirimler hem ortalama için hem de tek bir gözlem için aynıdır. Ancak tekil gözlem kestirimlerinin standart hatası, ortalama kestiriminin standart hatasına göre çok daha yüksektir. Bu nedenle güven aralığı daha geniştir. 
 
-Örneklem-içi fit değerlerinin grafiği  
+Örneklem-içi uyum değerlerinin (fitted values) grafiği  
 ```{r, echo=TRUE, results="hold"}
 plot(Boston$lstat, Boston$medv) 
 abline(reg1,lwd=3)
@@ -154,7 +156,7 @@ augment(reg1) %>%
   geom_line(mapping = aes(y = .fitted), color = "red")
 ```  
 
-Bu grafiklerden de görüldüğü gibi bu iki değişken arasında doğrusal olmayan bir ilişki mevcut. Doğrusal regresyon bu ilişkiyi yakalayamıyor gibi görünüyor. Bunu daha net görmek için kalıntıları oluşturup fit edilen değerlere göre grafiğini çizelim: 
+Bu grafiklerden de görüldüğü gibi bu iki değişken arasında doğrusal olmayan bir ilişki mevcuttur. Tahmin edilen regresyon modeli bu ilişkiyi tam  yakalayamıyor. Bunu daha net görmek için kalıntıları oluşturup örneklem-içi tahmin edilen değerlere göre grafiğini çizelim: 
 ```{r, echo=TRUE, results="hold"}
 # Residuals vs Fitted values plot
 Boston1$resid1 <- residuals(reg1)
@@ -164,7 +166,9 @@ Boston1 %>% ggplot(aes(yhat1, resid1)) +
 ```
 
 
-Eğer iyi bir uyum olsaydı kalıntıların 0 çevresinde rassal bir şekilde dağılması gerekirdi. Yukarıdaki şekildeyse böyle olmadığını görüyoruz.  
+Eğer iyi bir uyum olsaydı kalıntıların $0$ çevresinde rassal bir şekilde dağılması gerekirdi. Yukarıdaki şekildeyse böyle olmadığını görüyoruz.  
+
+<br>
 
 `lm()` tahmininden sonra regresyondaki problemlerin teşhisi için bazı diagnostik grafikler çizilebilir: 
 ```{r, echo=TRUE, results="hold"}
@@ -176,17 +180,17 @@ plot(reg1)
 
 İkinci grafik normal dağılımdan sapmaları gösteren Q-Q grafiğidir. Standardize edilmiş kalıntılar eğer normal dağılırsa aşağı yukarı kesikli çizginin üzerinde olmalı. Ancak özellikle kuyruklarda normallikten bazı sapmaların olduğunu görüyoruz. Daha fazla kanıt için normallik testleri yapılabilir.
 
-Üçüncü grafik (alt sol) kalıntı ve fit değerlerinin scale-location grafiğini görüyoruz. Dikey eksend standardize edilmiş kalıntıların mutlak değerinin kare kökü yer alıyor. Yine bu grafikte de sıfır çevresinde rassal bir dağılım bekliyoruz. Eğer belirgin bir örüntü varsa bu kalıntıların varyansının sabit olmadığına işaret eder (heteroskedasticity). Yukarıdaki grafik kalıntı varyansının aşağı yukarı sabit olduğunu söylüyor.  
+Üçüncü grafik (alt sol) kalıntı ve fit değerlerinin scale-location grafiğini görüyoruz. Dikey eksende standardize edilmiş kalıntıların mutlak değerinin kare kökü yer alıyor. Yine bu grafikte de sıfır çevresinde rassal bir dağılım bekliyoruz. Eğer belirgin bir örüntü varsa bu kalıntıların varyansının sabit olmadığına işaret eder (heteroskedasticity). Yukarıdaki grafik kalıntı varyansının aşağı yukarı sabit olduğunu söylüyor.  
 
 Dördüncü (alt sağ) grafik yüksek etkili gözlemlerin (influential observations) saptanmasında kullanılabilir. Bu gözlemler regresyonu önemli ölçüde etkileyen uç değerlerdir. Grafikte kırmızı kesitli çizgi ile Cook's distance değerleri gösterilmiştir. Bu kırmızı kesikli çizginin dışına düşen değerler yüksek etkili gözlemler olarak düşünülebilir. Grafiğe göre yüksek etkili gözlem yoktur.  
 
-
-Here is a simulated simple regression together with diagnostic pictures. 
+<br>
+**Örnek**: Simülasyonla bir veri seti türeterek regresyon modeli tahmin edelim ve tanısal grafikleri çizelim. 
 ```{r, echo=TRUE, results="hold"}
-set.seed(1) # for replication
+set.seed(1) # aynı sonuçları elde etmek için 
 n   <- 200
 x1  <- rnorm(n, mean=0, sd=1) 
-y   <- 1 + 2*x1 + rnorm(n, mean=0, sd=1)
+y   <- 1 + 2*x1 + rnorm(n, mean=0, sd=1)  # popülasyon regresyon modeli biliniyor
 df1 <- tibble(id=1:n, y, x1)
 reg_df1 <- lm(y ~ x1, data = df1)
 # diagnostic plots
@@ -194,13 +198,16 @@ par(mfrow=c(2,2))
 plot(reg_df1)
 ```
 
-An alternative diagnostic plot tool that uses `ggplot`: 
+`ggplot` ile alternatif tanısal grafikler: 
 ```{r, echo=TRUE, results="hold"}
-# diagnostics using lindia package 
+# lindia paketi yüklenmeli 
 library(lindia)
 reg_df1 %>% gg_diagnose(plot.all=TRUE)
 ```
 
+
+<br>
+<br>
 # Çok Değişkenli Doğrusal Regresyon 
 
 Boston veri setinde yer alan değişkenlerle bir ev fiyatı modeli oluşturalım. Veri setindeki tüm değişkenleri eklemek için aşağıdaki komutu kullanabiliriz: 
@@ -329,7 +336,7 @@ Bu sonuçlara göre karesel modelin kestirim performansı daha iyidir.
 # Sapma-Varyans Ödünümü Üzerine
 
 Modelin karmaşıklığı arttıkça sapmanın azaldığını ancak varyansın yükseldiğini biliyoruz. Test kestirim performansı da varyanstaki artışa bağlı olarak kötüleşiyordu. Bunu nümerik olarak göstermek için bir simülasyon deneyi tasarlayalım. Bu deneyde gerçek modeli biliyoruz. Ancak bilmediğimizi farzederek farklı karmaşıklık düzeylerine sahip modeller ile kestirim yapıyoruz. 
-Gerçek modelimiz 3. derece polinomdur: 
+Gerçek modelimiz 3. derece bir polinomdur: 
 ```{r, echo=TRUE, results="hold"}
 set.seed(1) # for replication
 n   <- 100

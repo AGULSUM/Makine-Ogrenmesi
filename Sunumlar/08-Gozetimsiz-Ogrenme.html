@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Gözetimsiz Öğrenme</title>
     <meta charset="utf-8" />
@@ -12,10 +12,9 @@
 class: center, middle, inverse, title-slide
 
 # Gözetimsiz Öğrenme
-## (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES)
+## (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES-2020)
 ### Hüseyin Taştan
 ### Yıldız Teknik Üniversitesi
-### Ağustos 2020
 
 ---
 
@@ -34,9 +33,13 @@ class: my-large-font, inverse, middle, center, clear
 .my-medium-font {
   font-size: 30px;
 }
+.red { 
+  color: red; 
+}
 &lt;/style&gt;
 
 
+Plan: 
 
 Gözetimli ve gözetimsiz öğrenme
 
@@ -66,7 +69,7 @@ Hiyerarşik Kümeleme
 # Gözetimsiz Öğrenme 
 
 * Gözetimsiz öğrenme yöntemleri keşifsel veri analizinin (exploratory data analysis - EDA) bir parçası olarak da kullanılabilir. Yaygın olarak kullanılan iki gözetimsiz öğrenme yöntemi: 
-1. **Temel Bileşenler Analizi (Principal Components Analysis - PCA)**: çok boyutlu verilerinin görselleştirilmesinde faydalı. Boyut küçültme (dimension reduction) ve gözetimli öğrenme yöntemlerinin öncesinde verileri işlemden geçirme amacıyla kullanılabilir (örneğin PCA regresyonu). 
+1. **Temel Bileşenler Analizi (Principal Components Analysis - PCA)**: çok boyutlu verilerin görselleştirilmesinde faydalı. Boyut küçültme (dimension reduction) ve gözetimli öğrenme yöntemlerinin öncesinde verileri işlemden geçirme amacıyla kullanılabilir (örneğin PCA regresyonu). 
 1. **Gruplandırma (Clustering)**: özellikle büyük veri yığınlarında gizlenmiş homojen grupların ortaya çıkarılması. 
   * K-Ortalamalar (K-means) gruplandırma
   * Hiyerarşik gruplandırma (hierarchical clustering)
@@ -109,7 +112,7 @@ Türkiye il verileri 2015 (ilk 10 öznitelik)
 
 * **Birinci temel bileşen**, `\(Z_1\)`, değişkenlerin en yüksek varyansa sahip normalize edilmiş doğrusal bir bileşkesidir: 
 `$$Z_{1}=\phi_{11} X_{1}+\phi_{21} X_{2}+\ldots+\phi_{p 1} X_{p}$$`
-Normalize edilmesinden kasıt `\(\phi\)` ağırlıklarının (*factor loadings*) toplamının 1 olmasıdır: 
+Normalize edilmesinden kasıt `\(\phi\)` ağırlıklarının (*factor loadings*) kareler toplamının 1 olmasıdır: 
 `$$\sum_{j=1}^{p} \phi_{j1}^2 = 1,~~~~\underbrace{\phi_{11},\phi_{21},\ldots,\phi_{p1}}_{\mbox{Birinci bileşenin ağırlıkları}}$$`
 
 * Birinci temel bileşenin ağırlık vektörü: 
@@ -195,9 +198,9 @@ K-Ortalamalar
 Her bir gruptaki gözlem indekslerini içeren kümeleri `\(C_1, C_2,\ldots,C_K\)`
 ile gösterelim. 
 
-Her bir gözlem sadece bir grupta yer alır, yani `\(C_{1} \cup C_{2} \cup \ldots \cup C_{K}=\{1, \ldots, n\}\)`
+Her bir gözlem bir grupta yer alır, yani `\(C_{1} \cup C_{2} \cup \ldots \cup C_{K}=\{1, \ldots, n\}\)`
 
-Ayrıca her gözlem sadece bir grupta yer alabilir: `\(C_{k} \cap C_{k^{\prime}}=\emptyset\)`, her `\(k\neq k^{\prime}\)` için. 
+Ayrıca gruplar örtüşmez: `\(C_{k} \cap C_{k^{\prime}}=\emptyset\)`, her `\(k\neq k^{\prime}\)` için. 
 
 K-ortalamalar gruplandırması: Grup-içi değişkenliği en küçük yapacak şekilde grupları belirler. Optimizasyon problemi: 
 `$$\min_{C_{1}, \ldots, C_{K}}\left\{\sum_{k=1}^{K} \frac{1}{\left|C_{k}\right|} \sum_{i, i^{\prime} \in C_{k}} \sum_{j=1}^{p}\left(x_{i j}-x_{i^{\prime} j}\right)^{2}\right\}$$`
@@ -216,7 +219,7 @@ Veriler:
 .pull-right[
 Algoritma adımları:  
 
-1. Gözlemleri tesadüfi bir şekilde `\(K\)` rgruptan birine ata. 
+1. Gözlemleri tesadüfi bir şekilde `\(K\)` gruptan birine ata. 
 
 2. İterasyonlar: Yakınsama sağlanıncaya kadar aşağıdaki adımları tekrarla:
  
@@ -378,7 +381,7 @@ Hiyerarşik Kümeleme
 
 * Birbirine yakın olan gözlemler birlikte kümelenir.
 
-* Birbirine yakın grupları da birlikte kümelendir. 
+* Birbirine yakın gruplar da birlikte kümelenir. 
 ]
 
 ---
@@ -392,7 +395,7 @@ Hiyerarşik Kümeleme
 
 * Birbirine yakın olan gözlemler birlikte kümelenir.
 
-* Birbirine yakın grupları da birlikte kümelendir.
+* Birbirine yakın gruplar da birlikte kümelenir.
 
 * En sonunda tüm gözlemleri kapsayan kümeye ulaşılır. 
 ]

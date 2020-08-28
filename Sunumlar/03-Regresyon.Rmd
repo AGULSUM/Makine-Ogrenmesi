@@ -1,7 +1,7 @@
 ---
 title: "Regresyon Analizi"
 author: "Hüseyin Taştan"
-date: "Ağustos 2020"
+# date: "Ağustos 2020"
 output:
   xaringan::moon_reader:
     css: [default, metropolis]
@@ -15,29 +15,42 @@ output:
   html_document:
     df_print: paged
   pdf_document: default
-subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-EYS)
-institute: Yıldız Technical University
+subtitle: (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES-2020)
+institute: Yıldız Teknik Üniversitesi
 ---
+class: my-medium-font
+
 <style type="text/css">
 .remark-slide-content {
     font-size: 25px;
     padding: 1em 4em 1em 4em;
 }
-.my-one-page-font {
+.my-large-font {
   font-size: 40px;
 }
 .my-small-font {
   font-size: 20px;
 }
+.my-medium-font {
+  font-size: 30px;
+}
 </style>
 
 
 
-# Konular
+# Plan
 
-- Doğrusal Regresyon 
+- Basit doğrusal regresyon modeli
 
-- Doğrusal Olmayan Regresyon 
+- Uyum iyiliği ölçütleri, istatistiksel çıkarsama
+
+- Çok değişkenli doğrusal regresyon 
+
+- Kategorik değişkenler
+
+- Etkileşim değişkenleri 
+
+- Potansiyel sorunların teşhisi 
 
 ---
 # Basit Doğrusal Regresyon Modeli 
@@ -84,7 +97,7 @@ $$\bar{y} = \frac{1}{n}\sum_{i=1}^n y_i,\quad \bar{x} = \frac{1}{n}\sum_{i=1}^n 
 
 $$\widehat{satışlar} = 7.03 + 0.0475~ TV Reklamları $$
 
-![:scale 75%](img/reg1.PNG)
+.center[![:scale 75%](img/reg1.PNG)]
 
 (James et al. (ISLR), Fig.3.1, s.62)
 
@@ -93,7 +106,7 @@ $$\widehat{satışlar} = 7.03 + 0.0475~ TV Reklamları $$
 
 Satış - Reklam Harcamaları örneği için OLS amaç fonksiyonu: 
 
-![:scale 80%](img/reg2.PNG)
+.center[![:scale 80%](img/reg2.PNG)]
 
 (ISLR, Fig.3.2, s.63)
 
@@ -107,7 +120,7 @@ katsayılar da değişir.
 
 * Bilinmeyen parametreler: $\beta_0$, $\beta_1$
 
-* OLS tahmincileri: $\hat{\beta}_0$, $\hat{\beta}_1$ -> rassal değişkenler. Veri değiştikçe bunlar da değişir. 
+* OLS tahmincileri: $\hat{\beta}_0$, $\hat{\beta}_1$, rassal değişkenler, veri değiştikçe bunlar da değişir. 
 
 * Pratikte elimizde sadece bir veri seti vardır. Bundan hareketle tahminin doğruluğunu nasıl değerlendirebiliriz? 
 
@@ -137,7 +150,7 @@ $\bar{y}=\bar{\hat{y}}$
 ---
 # Modelin Açıklama Gücü 
 
-* Her gözlem için: $y_i = \hat{y}_i + \hat{\epsilon}_i$. Bunun her iki tarafındaki terimleri örneklem ortalamalarından farkını aldıktan sonra karelerini alırsak:
+* Her gözlem için: $y_i = \hat{y}_i + \hat{\epsilon}_i$. Bunun her iki tarafındaki terimleri örneklem ortalamalarından farkını aldıktan sonra karelerini alıp toplarsak:
 
 * Toplam Kareler Toplam: (SST: Total Sum of Squares)
 $$SST = \sum_{i=1}^n (y_i -\bar{y})^2$$
@@ -200,11 +213,11 @@ $$t = \frac{\hat{\beta}_1-0}{\operatorname{SE}\left(\hat{\beta}_{1}\right)}$$
 
 > Verilmiş bir Tip-I hata olasılığı, $\alpha = Pr(|T|>c_{\alpha/2}~|~H_0)$, için hesaplanan $t$ istatistiğinin mutlak değeri kritik değer $c_{\alpha/2}$'den büyükse boş hipotez reddedilebilir. $$t>c_{\alpha/2}~~ \mbox{ya da}~~ t<-c_{\alpha/2}~~\mbox{ise}~~H_0~~red$$
 
-(Not: Burada $T$ $n-2$ serbestlik derecesine sahip bir $t$ rassal değişkenidir.)
+(Not: Burada $T$, $n-2$ serbestlik derecesine sahip bir $t$ rassal değişkenidir.)
 
-* Tip-I hata olasılığı: $Pr(H_0~~ RED~|~H_0~DOĞRU$. Bir boş hipotezin doğru olup olmadığı pratikte hiç bir zaman bilinemez. 
+* Tip-I hata olasılığı: $Pr(H_0~~ RED~|~H_0~DOĞRU)$. Bir boş hipotezin doğru olup olmadığı pratikte hiç bir zaman bilinemez. 
 
-* Tip-II hata olasılığı: $Pr(H_0~~ KABUL~|~H_0~YANLIŞ$. Bu olasılığı pratikte belirleyemeyiz.
+* Tip-II hata olasılığı: $Pr(H_0~~ KABUL~|~H_0~YANLIŞ)$. Bu olasılığı pratikte belirleyemeyiz.
 
 ---
 # p-değeri 
@@ -394,7 +407,7 @@ Bu model aslında $X$ değişkeninin kendisiyle etkileşim içinde olduğu anlam
 ## Yüksek Kaldıraç Noktaları: Çok büyük ya da küçük $x_i$ değerleri
 
 ![:scale 100%](img/reg9.PNG)
-41 numaralı nokta yüksek kaldıraçlı bir gözlem. Bu nokta dışlanarak tahmin yapıldığında (mavi kesikli doğru) sonuçlar önemli ölçüde değişiyor. En sağdaki grafikte kaldıraç (leverage) değerleri ile standardize ediilmiş kalıntılar gösterilmektedir (bkz. ISLR, Denklem 3.37, s.98)
+41 numaralı nokta yüksek kaldıraçlı bir gözlem. Bu nokta dışlanarak tahmin yapıldığında (mavi kesikli doğru) sonuçlar önemli ölçüde değişiyor. En sağdaki grafikte kaldıraç (leverage) değerleri ile standardize edilmiş kalıntılar gösterilmektedir (bkz. ISLR, Denklem 3.37, s.98)
 
 ---
 # Potansiyel Sorunların Teşhisi 
@@ -410,7 +423,7 @@ Tam çoklu doğrusallık durumunda OLS tahmincileri tanımsızdır. Ancak yükse
 
 ![:scale 70%](img/reg11.PNG)
 
-Sol: OLS amaç fonksiyonu kontür çizimi, düşük korelasyonlu $X$ değişkenleri; Sağ: yüksek korelasyonlu $X$ değişkenleri ile OLS 
+Sol: OLS amaç fonksiyonu kontür çizimi, düşük korelasyonlu $X$ değişkenleri; Sağ: yüksek korelasyonlu $X$ değişkenleri ile OLS. 
 
 
 

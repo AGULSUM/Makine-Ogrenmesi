@@ -1,6 +1,7 @@
 ---
 title: "R: Giriş"
-author: "Prof. Dr. Hüseyin Taştan" 
+author: "Prof. Dr. Hüseyin Taştan"
+date: "Ağustos 2020"
 output:
   html_document: 
     number_sections: true
@@ -137,7 +138,7 @@ print(a, digits = 17)
 ## [1] 80.999999999999986
 ```
 
-81 olarak bulduğumuz sonuç tam olarak 81 değil. Ama nasıl olur? Bilgisayar neden bize tam sonuç vermiyor? Bunun nedeni 81 sayısının (aslında tüm sayıların) ikili sistem kullanan bilgisayarlarda tam olarak temsil edilememesidir.  81'in temmsilindeki hata: 
+81 olarak bulduğumuz sonuç tam olarak 81 değil. Ama nasıl olur? Bilgisayar neden bize tam sonuç vermiyor? Bunun nedeni 81 sayısının (aslında tüm sayıların) ikili sistem kullanan bilgisayarlarda tam olarak temsil edilememesidir.  81'in temsilindeki hata: 
 
 ```r
 print(81-a, digits = 17)
@@ -156,7 +157,7 @@ format(81-a, scientific = FALSE)
 ## [1] "0.00000000000001421085"
 ```
 
-Bu yaptığınız hesaplamanın amacına bağlı olarak sorun yaratabilir. Örneğin yazdığınız programda bir aritmetik işlemin sonucunu başka bir sonuçla karşılaştırmak istediğinizi düşünelim. Bunun için mantıksal işlemcileri kullanabilirsiniz. Örneğin
+Bu, yaptığınız hesaplamanın amacına bağlı olarak sorun yaratabilir. Örneğin yazdığınız programda bir aritmetik işlemin sonucunu başka bir sonuçla karşılaştırmak istediğinizi düşünelim. Bunun için mantıksal işlemcileri kullanabilirsiniz. Örneğin
 
 ```r
 81 == a
@@ -176,7 +177,7 @@ all.equal(81,a)
 ## [1] TRUE
 ```
 
-Burada default tolerans düzeyi $0.000000015$ kullanıldı. Yani aritmetik çözüm ile tam sonuç arasındaki fark tolerans düzeyinden küçüktür. R'da machine precision $\epsilon$) 
+Burada default tolerans düzeyi $0.000000015$ kullanıldı. Yani aritmetik çözüm ile tam sonuç arasındaki fark tolerans düzeyinden küçüktür. R'da machine precision ($\epsilon$) 
 
 ```r
 print(.Machine$double.eps, digits=22)
@@ -189,6 +190,8 @@ print(.Machine$double.eps, digits=22)
 **Alıştırma:** Bilgisayarda temsil edilebilen 1'den küçük olan en büyük sayıyı bulunuz. 
 
 
+<br/>
+<br/>
 
 Diğer aritmetik işlemler de sorun yaratabilir. Örneğin 10.2'den 10.1'i çıkaralım: 
 
@@ -274,7 +277,7 @@ ls()
 ## [1] "a" "b" "e" "x" "y" "z"
 ```
 
-`RStudio`'da sağ üst pencered `Environment` altında tüm nesneler görülebilir. 
+`RStudio`'da sağ üst pencerede `Environment` altında tüm nesneler görülebilir. 
 
 `rm(x)` komutu `x` nesnesini hafızadan siler. Tüm nesneleri silmek istersek
 
@@ -528,7 +531,7 @@ score[n-3:n]
 
 **Alıştırma** `score` vektöründe kayıp değerleri `NA` bulunuz ve yeni bir vektör yaratarak bu değerleri siliniz. 
 
-**Çösül** Bunun en basit yolu temel R'da yer alan `which()` ve `is.na()` fonksiyonlarını kullanmaktır. `is.na()` fonksiyonu `NA` elemanlar için mantıksal değer `TRUE` olmayanlar için `FALSE` değerini içeren bir mantıksal vektör oluşturur.  
+**Çözüm** Bunun en basit yolu temel R'da yer alan `which()` ve `is.na()` fonksiyonlarını kullanmaktır. `is.na()` fonksiyonu `NA` elemanlar için mantıksal değer `TRUE` olmayanlar için `FALSE` değerini içeren bir mantıksal vektör oluşturur.  
 
 ```r
 # is an element NA ?
@@ -866,14 +869,14 @@ summary(mydata)
 ## [1] "score"  "gender"
 ## 'data.frame':	10 obs. of  2 variables:
 ##  $ score : num  80 65 78 94 100 NA 55 85 88 75
-##  $ gender: Factor w/ 2 levels "Female","Male": 1 2 1 1 2 1 2 2 1 1
-##      score        gender 
-##  Min.   : 55   Female:6  
-##  1st Qu.: 75   Male  :4  
-##  Median : 80             
-##  Mean   : 80             
-##  3rd Qu.: 88             
-##  Max.   :100             
+##  $ gender: chr  "Female" "Male" "Female" "Female" ...
+##      score        gender         
+##  Min.   : 55   Length:10         
+##  1st Qu.: 75   Class :character  
+##  Median : 80   Mode  :character  
+##  Mean   : 80                     
+##  3rd Qu.: 88                     
+##  Max.   :100                     
 ##  NA's   :1
 ```
 
@@ -1108,15 +1111,7 @@ library(ggpubr)
 ```
 
 ```
-## Warning: package 'ggpubr' was built under R version 3.6.3
-```
-
-```
 ## Loading required package: ggplot2
-```
-
-```
-## Warning: package 'ggplot2' was built under R version 3.6.3
 ```
 
 ```r

@@ -12,26 +12,32 @@
 class: center, middle, inverse, title-slide
 
 # Temel Kavramlar
-## (İktisatçılar İçin) Makine Öğrenmesi
+## (İktisatçılar İçin) Makine Öğrenmesi (TEK-ES 2020)
 ### Hüseyin Taştan
-### Yıldız Technical University
-### Ağustos 2020
+### Yıldız Teknik Üniversitesi
 
 ---
 
+class: my-medium-font
+
 &lt;style type="text/css"&gt;
 .remark-slide-content {
-    font-size: 30px;
+    font-size: 25px;
     padding: 1em 4em 1em 4em;
 }
-.my-one-page-font {
+.my-large-font {
   font-size: 40px;
+}
+.my-small-font {
+  font-size: 20px;
+}
+.my-medium-font {
+  font-size: 30px;
 }
 &lt;/style&gt;
 
 
-
-# Konular
+# Plan
 
 - Makine Öğrenmesi Problemi 
 - Öğrenme türleri: Gözetimli Öğrenme vs. Gözetimsiz Öğrenme
@@ -303,7 +309,7 @@ Siyah eğri: gerçek ilişki, Tahmin edilen modeller: doğrusal model (kavuniçi
 
 - Bias = Sapma (yanlılık)
 
-- Beklenen test hatasının azaltılabilmemsi için eşanlı olarak hem düşük varyanslı hem de düşük sapmalı öğrenme yönteminin seçilmesi gerekir. 
+- Beklenen test hatasının azaltılabilmesi için eşanlı olarak hem düşük varyanslı hem de düşük sapmalı öğrenme yönteminin seçilmesi gerekir. 
 
 - Modelin esnekliği (karmaşıklığı) arttıkça varyans artar sapma azalır.
 
@@ -315,11 +321,9 @@ Siyah eğri: gerçek ilişki, Tahmin edilen modeller: doğrusal model (kavuniçi
 Test MSE (kırmızı) = Modelin varyansı (kavuniçi) + Sapma Kare (mavi) + İndirgenemez Hata Varyansı (yatay kesikli çizgi)
 
 
-.center[![:scale 82%](img/MSE2.PNG)]
+.center[![:scale 75%](img/MSE2.PNG)]
 
-Dikey kesikli çizgi: en küçük test MSE değerini veren karmaşıklık düzeyi (serbestlik derecesi - degrees of freedom)
-
-(Kaynak: James et al., Figure 2.12, s.36)
+Dikey kesikli çizgi: en küçük test MSE değerini veren karmaşıklık düzeyi (serbestlik derecesi - degrees of freedom) (Kaynak: James et al., Figure 2.12, s.36)
 
 
 ---
@@ -426,11 +430,9 @@ Notlar: `\(K=3\)` için (bkz. soldaki grafik) x noktasına en yakın değerler i
 
 # KNN Eğitim ve Test Hata Oranları
 
-.center[![:scale 70%](img/KNN4.PNG)]
+.center[![:scale 55%](img/KNN4.PNG)]
 
-Not: Kesikli siyah çizgi Bayes hata oranıdır (veriler simülasyonla üretildiği için biliniyor)
-
-(Kaynak: James et al., Figure 2.17, s.42)
+Not: Kesikli siyah çizgi Bayes hata oranıdır (veriler simülasyonla üretildiği için biliniyor)  (Kaynak: James et al., Figure 2.17, s.42)
 
 
 ---

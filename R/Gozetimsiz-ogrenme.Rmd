@@ -55,7 +55,8 @@ apply(USArrests, 2, mean)
 apply(USArrests, 2, var) 
 ```
 
-Temel bileşenler analizi (PCA) birkaç tane paket mevcuttur (`prcomp`, `princomp`, vb.). 
+`R`'da Temel bileşenler analizi (PCA) için alternatif paketler mevcuttur (`prcomp`, `princomp`, vb.). 
+
 `prcomp` paketini `scale=TRUE` opsiyonuyla kullanalım: 
 ```{r}
 pr.out <- prcomp(USArrests, scale=TRUE)
@@ -174,7 +175,8 @@ km.out <- kmeans(x, 3, nstart=20)
 km.out
 plot(x, col=(km.out$cluster+1), main="K-Means Clustering Results with K=3", xlab="", ylab="", pch=20, cex=2)
 ```
-K = 3 olduğu için K-ortalamalar algoritması verileri 3 öbeğe ayırdı. Yukarıdaki grafikte de görülebileceği gibi mavi renkte yeni bir grup oluştur. 
+
+K = 3 olduğu için K-ortalamalar algoritması verileri 3 öbeğe ayırdı. Yukarıdaki grafikte de görülebileceği gibi mavi renkte yeni bir grup oluşturuldu. 
 
 K-ortalamalar algoritmasında yerel optimumdan kaçınmak için başlangıç değeri `nstart` için 20 ya da 50 gibi büyük bir değer kullanılabilir:
 ```{r}
@@ -212,9 +214,9 @@ Buna göre verilerin %84'ü doğru bir şekilde kümelenmiştir. Ancak bunu sapt
 
 # Hiyerarşik Kümeleme
 
-## Örnek: Yapay verileri 
+## Örnek: Yapay veriler
 
-R'da hiyerarşik kümeleme analizi için `hclust()` fonksiyonu kullanılabilir: 
+`R`'da hiyerarşik kümeleme analizi için `hclust()` fonksiyonu kullanılabilir: 
 ```{r}
 hc.complete <- hclust(dist(x), method="complete")
 hc.average <- hclust(dist(x), method="average")

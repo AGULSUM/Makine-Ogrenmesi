@@ -259,6 +259,8 @@ table(tree.pred, High.test)
 ## [1] 0.775
 ```
 
+<br/>
+
 # R ile Regresyon Ağaçları
 
 Örnek olarak `MASS` paketinde yer alan `Boston` ev fiyatları verisini kullanacağız. Bağımlı değişken medyan ev fiyatları (`medv`). Eğitim verilerinde ağaç tahmini: 
@@ -293,7 +295,8 @@ text(tree.boston, pretty=0)
 ```
 
 ![](Agaclar_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
-`lstat`: sosyoekonomik statüsü düşük olan bireylerin oranı. Bu değişkenin düşük olduğu yerlerde evler daha pahalıdır. 
+
+`lstat`: sosyoekonomik statüsü düşük olan hanelerin oranı. Bu değişkenin düşük olduğu yerlerde evler daha pahalıdır. 
 
 
 Ağacın budanması: 
@@ -335,6 +338,9 @@ mean((yhat-boston.test)^2)
 ```
 Test MSE = 18.93.  
 
+
+<br/>
+
 # Bagging ve Rassal Ormanlar 
 
 Örnek veri seti = `Boston`. Bagging ve rassal ormanlar için R `randomForest` 
@@ -370,7 +376,7 @@ bag.boston
 ##                     % Var explained: 85.87
 ```
 
-`mtry=13` opsiyonu = 13 değişkenin hepsi her ayırımda dikkate alınacak (bagging). Modelin test setindeki performansı 
+`mtry=13` opsiyonu: 13 değişkenin tamamı her ayırımda dikkate alınacak (bagging). Modelin test setindeki performansı: 
 
 ```r
 yhat.bag <- predict(bag.boston, newdata = Boston[-train,])
@@ -387,6 +393,7 @@ mean((yhat.bag-boston.test)^2)
 ```
 ## [1] 10.13872
 ```
+
 Test MSE = 10.13872. 
 
 `randomForest()` fonksiyonunda `ntree` opsiyonu ile ağacın büyüklüğünü değiştirebiliriz:
@@ -449,6 +456,7 @@ varImpPlot(rf.boston)
 
 Sonuçlara göre bölgenin refah düzeyi (`lstat`) ve ev büyüklüğü (`rm`) en önemli değişkenlerdir. 
 
+<br/>
 
 # Boosting 
 
@@ -459,7 +467,7 @@ library(gbm)
 ```
 
 ```
-## Loaded gbm 2.1.8
+## Loaded gbm 2.1.5
 ```
 
 ```r
@@ -534,13 +542,15 @@ mean((yhat.boost-boston.test)^2)
 
 Bu durumda MSE daha yüksek çıkmıştır. 
 
+<br/>
+
 # Örnek: Titanic 
 
-Bu örnekte Titanic kazasında ölenleri sınıflandıracağız, bkz. [RMS Titanic](https://en.wikipedia.org/wiki/RMS_Titanic). Bu trajik kaza çok fazla kişinin ölümü ile sonuçlanmıştır. Böyle kazaların tekrar yaşanmaması için çok sayıda güvenlik tedbirlerinin alınmasına ve yasal düzenleme yapılmasında etkili olmuştur. 
+Bu örnekte Titanic kazasında hayatını kaybedenler için bir sınıflandırma ağacı oluşturmaya çalışacağız (detaylar için bkz. [RMS Titanic](https://en.wikipedia.org/wiki/RMS_Titanic) ). Bu trajik kaza çok fazla kişinin ölümü ile sonuçlanmıştır. Böyle kazaların tekrar yaşanmaması için çok sayıda güvenlik tedbirlerinin alınmasında ve yasal düzenleme yapılmasında etkili olmuştur. 
 
 Sorular: acaba bu kadar kişinin ölümünün ardındaki nedenler nelerdir? Hangi değişkenler bireyin hayatta kalma olasılığı üzerinde önemli bir etkiye sahiptir?
 
-Bu problemi bir sınıflandırma problemi olarak ele alacağız. Önce verileri `R`'a tanıtalım: 
+Önce verileri `R`'a tanıtalım: 
 
 ```r
 library(tidyverse)
@@ -553,18 +563,18 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ------------------------------------------------------------ tidyverse 1.2.1 --
+## -- Attaching packages ----------------------------------------------- tidyverse 1.3.0 --
 ```
 
 ```
-## v ggplot2 3.2.1     v purrr   0.3.3
-## v tibble  2.1.3     v dplyr   0.8.3
-## v tidyr   1.0.0     v stringr 1.4.0
-## v readr   1.3.1     v forcats 0.4.0
+## <U+221A> ggplot2 3.3.0     <U+221A> purrr   0.3.3
+## <U+221A> tibble  3.0.1     <U+221A> dplyr   0.8.5
+## <U+221A> tidyr   1.0.0     <U+221A> stringr 1.4.0
+## <U+221A> readr   1.3.1     <U+221A> forcats 0.4.0
 ```
 
 ```
-## -- Conflicts --------------------------------------------------------------- tidyverse_conflicts() --
+## -- Conflicts -------------------------------------------------- tidyverse_conflicts() --
 ## x dplyr::combine()  masks randomForest::combine()
 ## x dplyr::filter()   masks stats::filter()
 ## x dplyr::lag()      masks stats::lag()
@@ -627,20 +637,19 @@ titanic_tree_data
 
 ```
 ## # A tibble: 891 x 12
-##    PassengerId Survived Pclass Name  Sex     Age SibSp Parch Ticket  Fare
-##          <int> <fct>     <int> <chr> <fct> <dbl> <int> <int> <chr>  <dbl>
-##  1           1 Died          3 Brau~ male     22     1     0 A/5 2~  7.25
-##  2           2 Survived      1 Cumi~ fema~    38     1     0 PC 17~ 71.3 
-##  3           3 Survived      3 Heik~ fema~    26     0     0 STON/~  7.92
-##  4           4 Survived      1 Futr~ fema~    35     1     0 113803 53.1 
-##  5           5 Died          3 Alle~ male     35     0     0 373450  8.05
-##  6           6 Died          3 Mora~ male     NA     0     0 330877  8.46
-##  7           7 Died          1 McCa~ male     54     0     0 17463  51.9 
-##  8           8 Died          3 Pals~ male      2     3     1 349909 21.1 
-##  9           9 Survived      3 John~ fema~    27     0     2 347742 11.1 
-## 10          10 Survived      2 Nass~ fema~    14     1     0 237736 30.1 
-## # ... with 881 more rows, and 2 more variables: Cabin <chr>,
-## #   Embarked <chr>
+##    PassengerId Survived Pclass Name  Sex     Age SibSp Parch Ticket  Fare Cabin
+##          <int> <fct>     <int> <chr> <fct> <dbl> <int> <int> <chr>  <dbl> <chr>
+##  1           1 Died          3 Brau~ male     22     1     0 A/5 2~  7.25 ""   
+##  2           2 Survived      1 Cumi~ fema~    38     1     0 PC 17~ 71.3  "C85"
+##  3           3 Survived      3 Heik~ fema~    26     0     0 STON/~  7.92 ""   
+##  4           4 Survived      1 Futr~ fema~    35     1     0 113803 53.1  "C12~
+##  5           5 Died          3 Alle~ male     35     0     0 373450  8.05 ""   
+##  6           6 Died          3 Mora~ male     NA     0     0 330877  8.46 ""   
+##  7           7 Died          1 McCa~ male     54     0     0 17463  51.9  "E46"
+##  8           8 Died          3 Pals~ male      2     3     1 349909 21.1  ""   
+##  9           9 Survived      3 John~ fema~    27     0     2 347742 11.1  ""   
+## 10          10 Survived      2 Nass~ fema~    14     1     0 237736 30.1  ""   
+## # ... with 881 more rows, and 1 more variable: Embarked <chr>
 ```
 
 ```r
@@ -722,9 +731,9 @@ mean(prederror1, na.rm = TRUE)
 # 1 - mean(predict(titanic_tree) == titanic_tree_data$Survived, na.rm = TRUE)
 ```
 
-Bu basit ağaçla bile hata oranı yaklaışk % 21. 
+Bu basit ağaçla bile hata oranı yaklaşık % 21. 
 
-Ek öznitelikleri de kullanarak daha karmaşık bir ağaç tahmin edelim. Önce karakter değişkenleri faktör değişkenine dönüştürelim: 
+Veri setinde yer alan diğer öznitelikleri de kullanarak daha karmaşık bir ağaç tahmin edelim. Önce karakter değişkenleri faktör değişkenine dönüştürelim: 
 
 ```r
 titanic_tree_full_data <- titanic %>%
@@ -787,6 +796,7 @@ Hata oranı:
 ```
 ## [1] 0.1829405
 ```
+
 Hata oranı daha da düştü, %18.3. 
 
 
@@ -889,7 +899,7 @@ titanic_rf$finalModel
 ##  $ finalModel  :List of 23
 ##   ..- attr(*, "class")= chr "randomForest"
 ##  $ preProcess  : NULL
-##  $ trainingData:Classes 'tbl_df', 'tbl' and 'data.frame':	714 obs. of  8 variables:
+##  $ trainingData: tibble [714 x 8] (S3: tbl_df/tbl/data.frame)
 ##  $ resample    : NULL
 ##  $ resampledCM : NULL
 ##  $ perfNames   : chr [1:2] "Accuracy" "Kappa"
@@ -943,7 +953,7 @@ Survived      96        194     0.3310345
 
 
 ```r
-# look at an indiividual tree
+# look at an individual tree
 randomForest::getTree(titanic_rf$finalModel, labelVar = TRUE)
 ```
 
@@ -1027,9 +1037,6 @@ randomForest::varImpPlot(titanic_rf$finalModel)
 ```
 
 ![](Agaclar_files/figure-html/unnamed-chunk-41-1.png)<!-- -->
-
-
-
 
 
 

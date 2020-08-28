@@ -53,30 +53,22 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages ------------------------------------------------ tidyverse 1.3.0 --
+## -- Attaching packages ----------------------------------------------------------- tidyverse 1.2.1 --
 ```
 
 ```
-## <U+221A> ggplot2 3.3.0     <U+221A> purrr   0.3.3
-## <U+221A> tibble  3.0.1     <U+221A> dplyr   0.8.5
-## <U+221A> tidyr   1.0.0     <U+221A> stringr 1.4.0
-## <U+221A> readr   1.3.1     <U+221A> forcats 0.4.0
+## v ggplot2 3.2.1     v purrr   0.3.3
+## v tibble  2.1.3     v dplyr   0.8.3
+## v tidyr   1.0.0     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.4.0
 ```
 
 ```
-## Warning: package 'ggplot2' was built under R version 3.6.3
+## Warning: package 'purrr' was built under R version 3.6.3
 ```
 
 ```
-## Warning: package 'tibble' was built under R version 3.6.3
-```
-
-```
-## Warning: package 'dplyr' was built under R version 3.6.3
-```
-
-```
-## -- Conflicts --------------------------------------------------- tidyverse_conflicts() --
+## -- Conflicts -------------------------------------------------------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ## x dplyr::select() masks MASS::select()
@@ -95,7 +87,7 @@ names(Boston)
 ##  [8] "dis"     "rad"     "tax"     "ptratio" "black"   "lstat"   "medv"
 ```
 
-Run the regression of medv (median house value in \$1000) on lower income status
+<br>
 
 Medyan ev fiyatlarının (medv, 1000\$) düşük gelir (lstat) üzerine basit regresyonunu kuralım: 
 
@@ -167,11 +159,13 @@ reg1$coefficients
 ##  34.5538409  -0.9500494
 ```
 
+<br>
+
 Denklem formunda yazalım: 
 $$\widehat{medv} = 34.55 - 0.950~lstat$$
 
 
-Regresyon çıktısını tablolaştırmak için çok sayıda başka araçlar geliştirilmiştir. Dilerseniz `broom` paketinde yer alan `tidy()`, `glance()` ve `augment()` fonksiyonlarını kullanabilirsiniz:  
+Regresyon sonuçlarını tablolaştırmak için çok sayıda araç geliştirilmiştir. Örneğin, `broom` paketinde yer alan `tidy()`, `glance()` ve `augment()` fonksiyonlarını kullanabilirsiniz:  
 
 ```r
 library(broom)
@@ -223,9 +217,9 @@ augment(reg1)
 
 
 
-  
+<br>  
 
-Regresyon katsayıları için %95 güven aralığı
+Regresyon katsayıları için %95 güven aralığı: 
 
 ```r
 # 95% confidence interval 
@@ -268,9 +262,9 @@ predict(reg1, data.frame(lstat=(c(5,10,15))), interval="prediction")
 ## 3 20.30310  8.077742 32.52846
 ```
 
-Dikkat edilirse kestirimler hem ortalama için hem de tek bir gözlem için aynı. Ancık Tekil gözlem kestirimlerinin standart hatası daha büyük olduğundan güven aralığı daha geniştir. 
+Dikkat edilirse kestirimler hem ortalama için hem de tek bir gözlem için aynıdır. Ancak tekil gözlem kestirimlerinin standart hatası, ortalama kestiriminin standart hatasına göre çok daha yüksektir. Bu nedenle güven aralığı daha geniştir. 
 
-Örneklem-içi fit değerlerinin grafiği  
+Örneklem-içi uyum değerlerinin (fitted values) grafiği  
 
 ```r
 plot(Boston$lstat, Boston$medv) 
@@ -306,7 +300,7 @@ augment(reg1) %>%
 
 ![](Regresyon_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
-Bu grafiklerden de görüldüğü gibi bu iki değişken arasında doğrusal olmayan bir ilişki mevcut. Doğrusal regresyon bu ilişkiyi yakalayamıyor gibi görünüyor. Bunu daha net görmek için kalıntıları oluşturup fit edilen değerlere göre grafiğini çizelim: 
+Bu grafiklerden de görüldüğü gibi bu iki değişken arasında doğrusal olmayan bir ilişki mevcuttur. Tahmin edilen regresyon modeli bu ilişkiyi tam  yakalayamıyor. Bunu daha net görmek için kalıntıları oluşturup örneklem-içi tahmin edilen değerlere göre grafiğini çizelim: 
 
 ```r
 # Residuals vs Fitted values plot
@@ -319,7 +313,9 @@ Boston1 %>% ggplot(aes(yhat1, resid1)) +
 ![](Regresyon_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
 
-Eğer iyi bir uyum olsaydı kalıntıların 0 çevresinde rassal bir şekilde dağılması gerekirdi. Yukarıdaki şekildeyse böyle olmadığını görüyoruz.  
+Eğer iyi bir uyum olsaydı kalıntıların $0$ çevresinde rassal bir şekilde dağılması gerekirdi. Yukarıdaki şekildeyse böyle olmadığını görüyoruz.  
+
+<br>
 
 `lm()` tahmininden sonra regresyondaki problemlerin teşhisi için bazı diagnostik grafikler çizilebilir: 
 
@@ -334,18 +330,18 @@ plot(reg1)
 
 İkinci grafik normal dağılımdan sapmaları gösteren Q-Q grafiğidir. Standardize edilmiş kalıntılar eğer normal dağılırsa aşağı yukarı kesikli çizginin üzerinde olmalı. Ancak özellikle kuyruklarda normallikten bazı sapmaların olduğunu görüyoruz. Daha fazla kanıt için normallik testleri yapılabilir.
 
-Üçüncü grafik (alt sol) kalıntı ve fit değerlerinin scale-location grafiğini görüyoruz. Dikey eksend standardize edilmiş kalıntıların mutlak değerinin kare kökü yer alıyor. Yine bu grafikte de sıfır çevresinde rassal bir dağılım bekliyoruz. Eğer belirgin bir örüntü varsa bu kalıntıların varyansının sabit olmadığına işaret eder (heteroskedasticity). Yukarıdaki grafik kalıntı varyansının aşağı yukarı sabit olduğunu söylüyor.  
+Üçüncü grafik (alt sol) kalıntı ve fit değerlerinin scale-location grafiğini görüyoruz. Dikey eksende standardize edilmiş kalıntıların mutlak değerinin kare kökü yer alıyor. Yine bu grafikte de sıfır çevresinde rassal bir dağılım bekliyoruz. Eğer belirgin bir örüntü varsa bu kalıntıların varyansının sabit olmadığına işaret eder (heteroskedasticity). Yukarıdaki grafik kalıntı varyansının aşağı yukarı sabit olduğunu söylüyor.  
 
 Dördüncü (alt sağ) grafik yüksek etkili gözlemlerin (influential observations) saptanmasında kullanılabilir. Bu gözlemler regresyonu önemli ölçüde etkileyen uç değerlerdir. Grafikte kırmızı kesitli çizgi ile Cook's distance değerleri gösterilmiştir. Bu kırmızı kesikli çizginin dışına düşen değerler yüksek etkili gözlemler olarak düşünülebilir. Grafiğe göre yüksek etkili gözlem yoktur.  
 
-
-Here is a simulated simple regression together with diagnostic pictures. 
+<br>
+**Örnek**: Simülasyonla bir veri seti türeterek regresyon modeli tahmin edelim ve tanısal grafikleri çizelim. 
 
 ```r
-set.seed(1) # for replication
+set.seed(1) # aynı sonuçları elde etmek için 
 n   <- 200
 x1  <- rnorm(n, mean=0, sd=1) 
-y   <- 1 + 2*x1 + rnorm(n, mean=0, sd=1)
+y   <- 1 + 2*x1 + rnorm(n, mean=0, sd=1)  # popülasyon regresyon modeli biliniyor
 df1 <- tibble(id=1:n, y, x1)
 reg_df1 <- lm(y ~ x1, data = df1)
 # diagnostic plots
@@ -355,15 +351,15 @@ plot(reg_df1)
 
 ![](Regresyon_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 
-An alternative diagnostic plot tool that uses `ggplot`: 
+`ggplot` ile alternatif tanısal grafikler: 
 
 ```r
-# diagnostics using lindia package 
+# lindia paketi yüklenmeli 
 library(lindia)
 ```
 
 ```
-## Warning: package 'lindia' was built under R version 3.6.3
+## Warning: package 'lindia' was built under R version 3.6.2
 ```
 
 ```r
@@ -374,13 +370,11 @@ reg_df1 %>% gg_diagnose(plot.all=TRUE)
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-```
-## `geom_smooth()` using formula 'y ~ x'
-## `geom_smooth()` using formula 'y ~ x'
-```
-
 ![](Regresyon_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
 
+
+<br>
+<br>
 # Çok Değişkenli Doğrusal Regresyon 
 
 Boston veri setinde yer alan değişkenlerle bir ev fiyatı modeli oluşturalım. Veri setindeki tüm değişkenleri eklemek için aşağıdaki komutu kullanabiliriz: 
@@ -788,7 +782,7 @@ Bu sonuçlara göre karesel modelin kestirim performansı daha iyidir.
 # Sapma-Varyans Ödünümü Üzerine
 
 Modelin karmaşıklığı arttıkça sapmanın azaldığını ancak varyansın yükseldiğini biliyoruz. Test kestirim performansı da varyanstaki artışa bağlı olarak kötüleşiyordu. Bunu nümerik olarak göstermek için bir simülasyon deneyi tasarlayalım. Bu deneyde gerçek modeli biliyoruz. Ancak bilmediğimizi farzederek farklı karmaşıklık düzeylerine sahip modeller ile kestirim yapıyoruz. 
-Gerçek modelimiz 3. derece polinomdur: 
+Gerçek modelimiz 3. derece bir polinomdur: 
 
 ```r
 set.seed(1) # for replication
