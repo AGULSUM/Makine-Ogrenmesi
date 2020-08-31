@@ -67,8 +67,6 @@ basılmış versiyon: (https://www.nber.org/chapters/c14009).
 
 Athey, S. ve Imbens, G.W. (2019), ''Machine Learning Methods That Economists Should Know About'', *Annual Review of Economics*, 11: 685-725. 
 
-James, Gareth, Witten D., Hastie T. ve Tibshirani R, (2017), *Introduction to Statistical Learning*, corrected 8th printing, Springer, New York.
-
 Kleinberg, J., Ludwig, J., Mullainathan, J., ve Obermeyer, Z. (2015), "Prediction Policy Problems", *American Economic Review, Papers and Proceedings*, 105(5): 491-495. [http://dx.doi.org/10.1257/aer.p20151023](http://dx.doi.org/10.1257/aer.p20151023)
 
 Mullainathan, S. ve Spiess, J. (2017) ''Machine Learning: An Applied Econometric Approach'', *Journal of Economic Perspectives*, 31(2), 87-106.
