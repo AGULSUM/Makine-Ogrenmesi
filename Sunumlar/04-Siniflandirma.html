@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
     <title>Sınıflandırma Problemleri</title>
     <meta charset="utf-8" />
@@ -369,13 +369,13 @@ Hata Matrisi (Confusion Matrix)
 * Eşik değeri 0.5 alındığında genel hata oranı en düşüktür. Ancak yanlış negatif oranı da en yüksektir. 
 * Eşik değeri azaldıkça, borcunu ödemeyenler içinde yanlış sınıflananların oranı (yanlış negatif oranı) azalmaktadır. 
 * Diğer taraftan, borcunu ödeyenler içinde yanlış sınıflananların oranı da artmaktadır. 
-* Hangi eşik değerini kullanacağımıza nasıl karar verebiliriz? 
+* Uygun eşik değerinin seçiminde alan bilgisi kullanılabilir. Diğer taraftan olanaklı tüm eşik değerleri için ROC eğrisi de çizilebilir. 
 
 ---
 # ROC Eğrisi 
-Bu amaçla literatürde ROC eğrisi olarak bilinen "Karar Değerlendirme Eğrisi" kullanılabilir. 
+ROC (Receiver Operating Characteristics) ya da  "Karar Değerlendirme Eğrisi" olanaklı tüm eşik değerleri için yanlış ve doğru pozitif oranlarını gösterir: 
 .pull-left[
-![:scale 100%](img/roc1.PNG)
+![:scale 90%](img/roc1.PNG)
 ]
 .pull-right[
 * Yatay eksen: yanlış pozitif oranı 
@@ -383,8 +383,9 @@ Bu amaçla literatürde ROC eğrisi olarak bilinen "Karar Değerlendirme Eğrisi
 * Tüm eşik değerleri için bu oranlar hesaplanıp grafik çizilir.
 * Genel performans ölçütü = AUC
 * AUC = Area Under the Curve (Eğrinin altındaki alan)
-* Maks. AUC = 1, yüksek AUC tercih edilir. 
-* Default verileri için AUC = 0.95
+* Maks. AUC = 1, yüksek AUC tercih edilir.
+* Rassal sınıflandırma: AUC = 0.5
+* Default verileri için LDA modeli AUC = 0.95. Lojistik regresyon ile aynı. 
 ]
 
 ---
