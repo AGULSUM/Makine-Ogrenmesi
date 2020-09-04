@@ -235,6 +235,22 @@ cutree(hc.complete, 2)
 cutree(hc.average, 2)
 ```
 
+```{r, echo=TRUE, results="hold"}
+cutree(hc.single, 2)
+```
+
+
+```{r, echo=TRUE, results="hold"}
+cutree(hc.single, 4)
+```
+
+Değişkenleri standardize etmek için `scale()` fonksiyonu kullanılabilir: 
+```{r, echo=TRUE, results="hold"}
+xsc=scale(x)
+plot(hclust(dist(xsc), method="complete"), main="Hierarchical Clustering with Scaled Features")
+```
+
+
 ## Örnek: Body data 
 
 ```{r}
@@ -261,25 +277,6 @@ plot(hcbody.average, main="Average Linkage", xlab="", sub="", cex=.9)
 plot(hcbody.single, main="Single Linkage", xlab="", sub="", cex=.9)
 ```
 
-
-
-
-
-```{r, echo=TRUE, results="hold"}
-cutree(hc.single, 2)
-```
-
-
-```{r, echo=TRUE, results="hold"}
-cutree(hc.single, 4)
-```
-
-To scale the variables before performing hierarchical clustering of the
-observations, we use the scale() function:
-```{r, echo=TRUE, results="hold"}
-xsc=scale(x)
-plot(hclust(dist(xsc), method="complete"), main="Hierarchical Clustering with Scaled Features")
-```
 
 
 ```{r, echo=TRUE, results="hold"}

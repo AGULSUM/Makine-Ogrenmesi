@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
     <title>Ağaç Bazlı Yöntemler</title>
     <meta charset="utf-8" />
@@ -55,10 +55,15 @@ background-size: cover
 # Karar Ağaçları 
 
 * Hem regresyon hem de sınıflandırma problemlerine uygulanabilir.
+
 * Karar ağaçlarında amaç `\(X\)` değişkenlerini basit ve kolayca yorumlanabilir alt bölgelere ayırmaktır. 
-* Daha sonra eğitim veri setinde bulunduğu alt bölgeye göre tahminler hesaplanır (ortalama ya da medyan kullanılabilir).
+
+* Daha sonra eğitim veri setinde bulunduğu alt bölgeye göre tahminler hesaplanır.
+
 * Alt bölgelerin ayrılmasında uygulanan kurallar bir karar ağacı ile temsil edilebilir.  
-* Ancak tek başına karar ağaçları kestirim açısından regresyon ve diğer sınıflandırma yöntemlerine göre daha başarısız. 
+
+* Ancak tek başına karar ağaçları kestirim açısından regresyon ve diğer sınıflandırma yöntemlerine göre daha başarısızdır. 
+
 * Çözüm: Gruplama teknikleri kullanmak. Çok sayıda ağaç tahmin edilip kestirimden önce bunların birleştirilmesine dayanan bu yöntemlere örnek olarak torbalama (bagging), rassal ormanlar (random forests), takviye (boosting) verilebilir.
 
 ---
@@ -67,7 +72,7 @@ background-size: cover
 Regresyon ağacının adımları: 
 1. `\(X\)` uzayını oluşturan `\((X_1, X_2,\ldots,X_p)\)` değişkenlerinin tüm olanaklı değerleri için `\(J\)` birbiriyle örtüşmeyen ve ayrık bölge oluşturulur:
 `$$(R_1, R_2, \ldots, R_J)$$`
-1. Herhangi bir `\(R_j\)` bölgesine düşen bir gözlem için çıktı değişkeninin ortalaması alınarak kestirim oluşturulur. Aynı bölgeye düşen gözlemler için aynı kestirim yapılır. 
+1. Herhangi bir `\(R_j\)` bölgesine düşen bir gözlem için çıktı değişkeninin ortalaması alınarak kestirim hesaplanır. Aynı bölgeye düşen gözlemler için aynı kestirim yapılır. 
 
 Bölgelerin şekli nasıl olacaktır? Tahmin edilen modelin yorum kolaylığı açısından `\(X\)` uzayının kutulara ayrılması uygundur. Bunun için aşağıdaki kalıntı kareleri toplamını minimum yapan kutular seçilir. `\(\hat{y}_{R_{j}}\)` `\(j\)` bölgesindeki ortalama olmak üzere:  
 `$$\sum_{j=1}^{J} \sum_{i \in R_{j}}\left(y_{i}-\hat{y}_{R_{j}}\right)^{2}$$`
@@ -212,13 +217,17 @@ Bölgelerin şekli nasıl olacaktır? Tahmin edilen modelin yorum kolaylığı a
 # Ağacın Budanması 
 
 * Bir regresyon ağacı eğitim setinde iyi bir uyum sergilese de test verilerinde başarılı kestirimler vermez. 
+
 * Bunun nedeni aşırı uyumdur (overfitting). Ortaya çıkan ağaç çok büyük olma eğilimindedir. 
-* Çözüm: gereksiz dalları (branches) budayarak daha küçük ve daha başarılı kestirim performansına sahip ağaç oluşturmak
-* Daha küçük ağaç daha az terminal düğüm noktalarına (yapraklara) sahiptir. 
+
+* Altarnatif: gereksiz dalları (branches) budayarak daha küçük ve daha başarılı kestirim performansına sahip ağaç oluşturmak. Küçük ağaç = son düğüm noktaları (yaprakları) daha az.  
+
 * Küçük ağaçlar az miktarda sapma içerse de varyansları çok daha düşüktür. 
+
 * Ağacın budanması: 
   1. Büyük bir ağaç ile başla 
   1. Daha sonra çapraz geçerleme ile en başarılı test performansına sahip alt ağacı seç. 
+
 * Ancak olanaklı alt ağaçların sayısı çok fazla olduğundan bu yol takip edilmez.
 
 ---
@@ -226,7 +235,7 @@ Bölgelerin şekli nasıl olacaktır? Tahmin edilen modelin yorum kolaylığı a
 
 * Olanaklı tüm alt ağaçlar için çapraz geçerleme yapmak yerine `\(\alpha\)` gibi bir ayarlama parametresi ile indekslenmiş ağaçları düşünebiliriz: 
 `$$\sum_{m=1}^{|T|} \sum_{i: x_{i} \in R_{m}}\left(y_{i}-\hat{y}_{R_{m}}\right)^{2}+\alpha|T|$$`
-`\(\alpha\)`=ayarlama parametresi, `\(|T|\)` terminal düğüm sayısı 
+`\(\alpha\)`=ayarlama parametresi, `\(|T|\)` = son düğüm (yaprak) sayısı 
 
 * `\(\alpha\)` parametresi modelin (ağacın) karmaşıklığı ile model uyumu arasındaki ödünümü yakalar. 
 
@@ -290,11 +299,15 @@ background-color: #FFFFFF
 # Sınıflandırma ağaçlarında performans
 
 * Sınıflandırma ağaçlarında bölgelerin ikili ayrımında kalıntı kareleri toplamı (SSR) ölçüt olarak kullanılamaz. 
+
 * SSR yerine *sınıflandırma hata oranı*nı ( `\(E\)` ) kullanabiliriz:
 `$$E = 1-\max_k(\hat{p}_{mk})$$`
 `\(\hat{p}_{mk}\)`: eğitim setinde `\(m\)` bölgesinde `\(k\)` grubundaki gözlemlerin oranı. 
+
 * Zayıf yanı: `\(E\)` ağaç oluşturmada yeterli duyarlılığa sahip değil. Pratikte iki alternatif tercih edilir.
+
   1. Gini indeksi ( `\(G\)` )
+
   1. Entropi ( `\(D\)` )
 
 
@@ -308,7 +321,7 @@ Gini indeksi:
 .pull-right[
 * Gini indeksi `\(K\)` sınıftaki toplam değişkenliğin bir ölçüsüdür. 
 * Tüm `\(\hat{p}_{mk}\)` değerleri 0'a ya da 1'e yakın olduğunda `\(G\)` küçük bir değer alır. 
-* Bu nedenle Gini indeksi bir düğümün saflığının (nude purity) da bir ölçüsüdür. 
+* Bu nedenle Gini indeksi bir düğümün saflığının (node purity) da bir ölçüsüdür. 
 ]
 
 .pull-left[
@@ -399,9 +412,15 @@ Tek karar ağacı tahmin etmek yerine çok sayıda ağaç oluşturup bunların b
 # Out-of-bag Hata Tahmini 
 
 * Bagging yönteminde test hatasını nasıl hesaplayabiliriz? 
+
 * Çapraz geçerleme uygulamadan test hatasını tahmin etmek mümkündür. 
-* Bootstrap ile ağaçlar oluşturulduğunda verilerin yaklaşık olark 2/3'ü kullanılmış olur. Geriye kalan 1/3 geçerleme seti olarak kullanılabilir. Her bir bootstrap adımında, gözlemlerin modelin eğitiminde kullanılmayan 1/3'lük kısmına **out-of-bag (OOB)** gözlemler denir.
+
+* Bootstrap ile ağaçlar oluşturulduğunda verilerin yaklaşık olarak 2/3'ü kullanılmış olur. Geriye kalan 1/3 geçerleme kümesi olarak kullanılabilir. 
+
+* Her bir bootstrap adımında, gözlemlerin modelin eğitiminde kullanılmayan 1/3'lük kısmına **out-of-bag (OOB)** gözlemler denir.
+
 * Bu OOB gözlemlerini test hatasını tahmin etmekte kullanabiliriz. Buna OOB hatası denir. (regresyon için OOB MSE, sınıflandırma için OOB sınıflama hatası)
+
 * Bu yaklaşım büyük `\(B\)` değerleri için Biri-hariç çapraz geçerleme (LOOCV) benzeri sonuç üretir. 
 * Bootstrap örneklemleri için hesaplamalar yapılırken OOB hatası da kolayca hesaplanabilir. Ayrıca çapraz geçerleme yapmaya gerek kalmaz. 
 
@@ -424,22 +443,33 @@ Tek karar ağacı tahmin etmek yerine çok sayıda ağaç oluşturup bunların b
 # Rassal Ormanlar 
 
 * Bagging yönteminde her adımda ayrı bir ağaç tahmin ediliyordu. Gözlemler farklılaşsa da aynı değişken seti kullanılıyordu. 
+
 * Bu süreçte ağaçlar birbirine benzer olma eğilimindedir. Yani ağaçlar arasında korelasyon yüksektir. Bu da ortalamanın varyansını arttırır. 
+
 * Rassal Ormanlar (Random Forests) benzer adımları takip eder. Ancak, korelasyonu azaltmak ve varyansı düşürmek (*decorrelating*) için ağaçlar oluşturulurken dal ayrımlarında tüm `\(p\)` değişkenleri değil de bunların `\(m\)` gibi bir rassal alt kümesi göz önüne alınır. 
-* Her hangi bir ağaçta yeni bir ayırım yapılırken gözönüne alınacak `\(m\approx \sqrt{p}\)` tane `\(X\)` değişkeni rassal olarak belirlenir. Örneğin bir ağaçta `\(X_1,X_3,X_5\)` kullanılırken başka bir ağaçta `\(X_2,X_4\)` kullanılabilir ( `\(p=5\)` için). 
+
+* Her hangi bir ağaçta yeni bir ayırım yapılırken gözönüne alınacak `\(m\approx \sqrt{p}\)` tane `\(X\)` değişkeni rassal olarak belirlenir. Örneğin bir ayırımda `\(X_1,X_3,X_5\)` kullanılırken başka birinde `\(X_2,X_4\)` kullanılabilir ( `\(p=5\)` için). 
+
 * Bagging Rassal Ormanlar'ın özel bir halidir. `\(m=p\)` alındığında bagging elde edilir.
 
 ---
 # Boosting 
 
 * Boosting (Takviye) yöntemi Bagging ve Rassal Ormanlara benzer şekilde çalışır. 
+
 * Ancak ağaçlar bir önceki ağacın bilgisi göz önüne alınarak ardışık bir şekilde oluşturulur. 
+
 * Boosting yönteminde bootstrap kullanılmaz. 
+
 * İzleyen sayfada algoritma özetlenmiştir. 
+
 * Boosting algoritmasında 3 ayarlama parametresi vardır. 
-* `\(B\)` ağaç sayısı. Bagging ve Rassal Ormanlardan farklı olarak büyük `\(B\)` değerleri aşırı uyuma yol açabilir. Uygun değer çapraz geçerleme ile seçilebilir. 
+
+* `\(B\)` = ağaç sayısı. Bagging ve Rassal Ormanlardan farklı olarak büyük `\(B\)` değerleri aşırı uyuma yol açabilir. Uygun değer çapraz geçerleme ile seçilebilir. 
+
 * Küçülme (shrinkage) parametresi `\(\lambda\)` boosting algoritmasının öğrenme hızını kontrol eder. Pratikte 0.01 veya 0.001 gibi değerler kullanılabilir. 
-* Ağaçlardaki düğüm sayısı `\(d\)`. Pratikte `\(d=1\)` olarak seçilebilir. 
+
+* Ağaçlardaki düğüm sayısı = `\(d\)`. Pratikte `\(d=1\)` olarak seçilebilir. 
 
 ---
 class: my-small-font

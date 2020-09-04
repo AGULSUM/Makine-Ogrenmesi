@@ -263,22 +263,22 @@ summary(pr.out)
 
 ```
 ## Importance of components:
-##                           PC1    PC2     PC3     PC4     PC5     PC6     PC7
-## Standard deviation     3.8644 1.5758 1.03211 0.95475 0.69342 0.65851 0.58162
-## Proportion of Variance 0.6493 0.1080 0.04632 0.03963 0.02091 0.01885 0.01471
-## Cumulative Proportion  0.6493 0.7572 0.80357 0.84320 0.86410 0.88296 0.89767
-##                           PC8     PC9    PC10    PC11    PC12    PC13    PC14
-## Standard deviation     0.5674 0.52727 0.52186 0.49794 0.45082 0.42002 0.39670
-## Proportion of Variance 0.0140 0.01209 0.01184 0.01078 0.00884 0.00767 0.00684
-## Cumulative Proportion  0.9117 0.92375 0.93559 0.94637 0.95521 0.96288 0.96972
-##                           PC15   PC16    PC17    PC18   PC19    PC20    PC21
-## Standard deviation     0.38094 0.3490 0.32002 0.29400 0.2835 0.23619 0.21552
-## Proportion of Variance 0.00631 0.0053 0.00445 0.00376 0.0035 0.00243 0.00202
-## Cumulative Proportion  0.97603 0.9813 0.98578 0.98954 0.9930 0.99546 0.99748
-##                           PC22   PC23
-## Standard deviation     0.19313 0.1437
-## Proportion of Variance 0.00162 0.0009
-## Cumulative Proportion  0.99910 1.0000
+##                           PC1    PC2     PC3     PC4     PC5     PC6
+## Standard deviation     3.8644 1.5758 1.03211 0.95475 0.69342 0.65851
+## Proportion of Variance 0.6493 0.1080 0.04632 0.03963 0.02091 0.01885
+## Cumulative Proportion  0.6493 0.7572 0.80357 0.84320 0.86410 0.88296
+##                            PC7    PC8     PC9    PC10    PC11    PC12
+## Standard deviation     0.58162 0.5674 0.52727 0.52186 0.49794 0.45082
+## Proportion of Variance 0.01471 0.0140 0.01209 0.01184 0.01078 0.00884
+## Cumulative Proportion  0.89767 0.9117 0.92375 0.93559 0.94637 0.95521
+##                           PC13    PC14    PC15   PC16    PC17    PC18
+## Standard deviation     0.42002 0.39670 0.38094 0.3490 0.32002 0.29400
+## Proportion of Variance 0.00767 0.00684 0.00631 0.0053 0.00445 0.00376
+## Cumulative Proportion  0.96288 0.96972 0.97603 0.9813 0.98578 0.98954
+##                          PC19    PC20    PC21    PC22   PC23
+## Standard deviation     0.2835 0.23619 0.21552 0.19313 0.1437
+## Proportion of Variance 0.0035 0.00243 0.00202 0.00162 0.0009
+## Cumulative Proportion  0.9930 0.99546 0.99748 0.99910 1.0000
 ```
 
 ```r
@@ -333,8 +333,8 @@ km.out$cluster
 ```
 
 ```
-##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2
-## [39] 2 2 2 2 2 2 2 2 2 2 2 2
+##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2
+## [36] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 ```
 
 ```r
@@ -361,8 +361,8 @@ km.out
 ## 3  2.3001545 -2.69622023
 ## 
 ## Clustering vector:
-##  [1] 1 3 1 3 1 1 1 3 1 3 1 3 1 3 1 3 1 1 1 1 1 3 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2
-## [39] 2 2 2 2 2 3 2 3 2 2 2 2
+##  [1] 1 3 1 3 1 1 1 3 1 3 1 3 1 3 1 3 1 1 1 1 1 3 1 1 1 2 2 2 2 2 2 2 2 2 2
+## [36] 2 2 2 2 2 2 2 2 3 2 3 2 2 2 2
 ## 
 ## Within cluster sum of squares by cluster:
 ## [1] 25.74089 52.67700 19.56137
@@ -370,8 +370,9 @@ km.out
 ## 
 ## Available components:
 ## 
-## [1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
-## [6] "betweenss"    "size"         "iter"         "ifault"
+## [1] "cluster"      "centers"      "totss"        "withinss"    
+## [5] "tot.withinss" "betweenss"    "size"         "iter"        
+## [9] "ifault"
 ```
 
 ```r
@@ -463,8 +464,8 @@ cutree(hc.complete, 2)
 ```
 
 ```
-##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2
-## [39] 2 2 2 2 2 2 2 2 2 2 2 2
+##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2
+## [36] 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
 ```
 
 
@@ -473,9 +474,40 @@ cutree(hc.average, 2)
 ```
 
 ```
-##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 1 2 2 2 2 2
-## [39] 2 2 2 2 2 1 2 1 2 2 2 2
+##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 1 2 2
+## [36] 2 2 2 2 2 2 2 2 1 2 1 2 2 2 2
 ```
+
+
+```r
+cutree(hc.single, 2)
+```
+
+```
+##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+## [36] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+```
+
+
+
+```r
+cutree(hc.single, 4)
+```
+
+```
+##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 1 1 1 1 1 1 1 1 3 3 3 3 3 3 3 3 3 3
+## [36] 3 3 3 3 3 3 4 3 3 3 3 3 3 3 3
+```
+
+Değişkenleri standardize etmek için `scale()` fonksiyonu kullanılabilir: 
+
+```r
+xsc=scale(x)
+plot(hclust(dist(xsc), method="complete"), main="Hierarchical Clustering with Scaled Features")
+```
+
+![](Gozetimsiz-ogrenme_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
+
 
 ## Örnek: Body data 
 
@@ -495,7 +527,7 @@ Dendrogramlar:
 plot(hcbody.complete,main="Complete Linkage", xlab="", sub="", cex=.9)
 ```
 
-![](Gozetimsiz-ogrenme_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
+![](Gozetimsiz-ogrenme_files/figure-html/unnamed-chunk-31-1.png)<!-- -->
 
 
 
@@ -503,7 +535,7 @@ plot(hcbody.complete,main="Complete Linkage", xlab="", sub="", cex=.9)
 plot(hcbody.average, main="Average Linkage", xlab="", sub="", cex=.9)
 ```
 
-![](Gozetimsiz-ogrenme_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
+![](Gozetimsiz-ogrenme_files/figure-html/unnamed-chunk-32-1.png)<!-- -->
 
 
 
@@ -511,42 +543,8 @@ plot(hcbody.average, main="Average Linkage", xlab="", sub="", cex=.9)
 plot(hcbody.single, main="Single Linkage", xlab="", sub="", cex=.9)
 ```
 
-![](Gozetimsiz-ogrenme_files/figure-html/unnamed-chunk-30-1.png)<!-- -->
-
-
-
-
-
-
-```r
-cutree(hc.single, 2)
-```
-
-```
-##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
-## [39] 1 1 1 1 1 1 1 1 1 1 1 1
-```
-
-
-
-```r
-cutree(hc.single, 4)
-```
-
-```
-##  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 1 1 1 1 1 1 1 1 3 3 3 3 3 3 3 3 3 3 3 3 3
-## [39] 3 3 3 4 3 3 3 3 3 3 3 3
-```
-
-To scale the variables before performing hierarchical clustering of the
-observations, we use the scale() function:
-
-```r
-xsc=scale(x)
-plot(hclust(dist(xsc), method="complete"), main="Hierarchical Clustering with Scaled Features")
-```
-
 ![](Gozetimsiz-ogrenme_files/figure-html/unnamed-chunk-33-1.png)<!-- -->
+
 
 
 
